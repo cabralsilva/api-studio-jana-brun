@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import br.com.api.entity.Product;
+import br.com.api.entity.Register;
 import br.com.api.enums.RegisterStatusEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,12 +21,13 @@ import lombok.experimental.SuperBuilder;
 public class RegisterDTO {
 
 	private Integer identifier;
+	private Register register;
 	private StudentDTO student;
 	private PersonDTO responsibleFinancial;
 	private LocalDateTime creationDateTime;
 	private LocalDateTime effectiveDateTime;
 	private Integer dayOfMonthToPayment;
-	private List<Product> productList;
+    private List<RegisterItemDTO> registerItemList;
 	private RegisterStatusEnum status;
 
 }

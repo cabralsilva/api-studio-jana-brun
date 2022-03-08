@@ -1,4 +1,4 @@
-package br.com.api.flow.register;
+package br.com.api.flow.grate;
 
 import java.util.ArrayList;
 
@@ -7,39 +7,32 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import br.com.api.dto.RegisterDTO;
-import br.com.api.dto.RegisterItemDTO;
+import br.com.api.dto.GrateDTO;
 import br.com.api.enums.LevelReport;
-import br.com.api.enums.RegisterStatusEnum;
 import br.com.api.enums.StatusResponse;
-import br.com.api.flow.register.item.InsertRegisterFlowItem;
-import br.com.api.flow.registeritem.item.InsertRegisterItemFlowItem;
+import br.com.api.flow.grate.item.InsertGrateFlowItem;
 import br.com.api.utils.ReportTech;
 import br.com.api.utils.ResponseAPI;
 
 @Service
-public class InsertRegisterFlow {
+public class InsertGrateFlow {
 
 	@Autowired
-	private InsertRegisterFlowItem insertRegisterFlowItem;
-	
-	@Autowired
-	private InsertRegisterItemFlowItem insertRegisterItemFlowItem;
+	private InsertGrateFlowItem insertGrateFlowItem;
 
 	@Autowired
 	private MessageSource messageSource;
 
-	public ResponseAPI execute(RegisterDTO registerDTO, HttpHeaders headers) {
+	public ResponseAPI execute(GrateDTO countryDTO, HttpHeaders headers) {
 
 		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
-			registerDTO.setStatus(RegisterStatusEnum.TEMPORARY);
-			response.setData(insertRegisterFlowItem.insert(registerDTO));
+			response.setData(insertGrateFlowItem.insert(countryDTO));
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.setStatus(StatusResponse.ERROR);
+
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())
 					.message(e.getLocalizedMessage()).exception(e).build());
 		}

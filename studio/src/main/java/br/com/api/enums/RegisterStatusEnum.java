@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum RegisterStatusEnum {
 
+	TEMPORARY("label.temperary"),
 	PRE_REGISTER("label.pre.register"), 
 	EFFECTIVE("label.effective"), 
 	CANCELLED("label.cancelled");
