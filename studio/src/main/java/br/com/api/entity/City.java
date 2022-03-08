@@ -33,7 +33,7 @@ public class City {
 	@Column(name = "city_abbreviation", nullable = false)
 	private String abbreviation;
 	
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "state_id", nullable = false)
 	private State state;
 }

@@ -27,16 +27,16 @@ public class Student {
 	private Integer identifier;
 
 	@ManyToOne
-	@JoinColumn(name = "school_child_id", nullable = false)
-	private Individual schoolChild;
-
-	@ManyToOne
 	@JoinColumn(name = "responsible_id", nullable = false)
-	private Individual responsible;
+	private Person responsible;
+	
+	@ManyToOne
+	@JoinColumn(name = "person_id", nullable = false)
+	private Person person;
 
 	@ManyToOne
 	@JoinColumn(name = "school_id", nullable = false)
-	private Individual school;
+	private Person school;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "student_school_level", nullable = false)

@@ -27,7 +27,7 @@ public class Neighborhood {
 	@Column(name = "neighborhood_name", nullable = false)
 	private String name;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "city_id", nullable = false)
 	private City city;
 

@@ -4,12 +4,20 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import br.com.api.enums.OftenEnum;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+@JsonInclude(Include.NON_NULL)
 @Getter
 @Setter
+@NoArgsConstructor
+@SuperBuilder
 public class ScheduleDetailDTO {
 
 	private Integer identifier;

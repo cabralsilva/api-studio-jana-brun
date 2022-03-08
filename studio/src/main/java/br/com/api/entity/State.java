@@ -36,7 +36,7 @@ public class State {
 	@Column(name = "state_abbreviation", nullable = false)
 	private String abbreviation;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "country_id", nullable = false)
 	private Country country;
 }

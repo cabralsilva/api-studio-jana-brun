@@ -12,7 +12,7 @@ import br.com.api.enums.LevelReport;
 import br.com.api.enums.StatusResponse;
 import br.com.api.flow.address.CheckAddressFlow;
 import br.com.api.flow.employee.item.InsertEmployeeFlowItem;
-import br.com.api.flow.individual.CheckIndividualFlow;
+import br.com.api.flow.person.CheckPersonFlow;
 import br.com.api.utils.ReportTech;
 import br.com.api.utils.ResponseAPI;
 
@@ -25,7 +25,7 @@ public class InsertEmployeeFlow {
 	@Autowired
 	private CheckAddressFlow checkAddressFlow;
 	@Autowired
-	private CheckIndividualFlow checkIndividualFlow;
+	private CheckPersonFlow checkIndividualFlow;
 
 	@Autowired
 	private MessageSource messageSource;

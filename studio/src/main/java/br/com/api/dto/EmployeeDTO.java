@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 public class EmployeeDTO {
 
 	private Integer identifier;
-	private IndividualDTO individual;
+	private PersonDTO individual;
 	private Boolean medicinContinuous;
 	private String medicinNotes;
 	private Boolean allergiesContinuous;

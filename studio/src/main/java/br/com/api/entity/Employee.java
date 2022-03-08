@@ -30,8 +30,8 @@ public class Employee {
 	private Integer identifier;
 
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
-	@JoinColumn(name = "individual_id", nullable = false)
-	private Individual individual;
+	@JoinColumn(name = "person_id", nullable = false)
+	private Person person;
 
 	@Column(name = "employee_medicin_continuous", nullable = false)
 	private Boolean medicinContinuous;
