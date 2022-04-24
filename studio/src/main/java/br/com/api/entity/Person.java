@@ -2,7 +2,6 @@ package br.com.api.entity;
 
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -42,11 +41,11 @@ public class Person {
 	@Column(name = "person_document_number_2")
 	private String documentNumber2;
 
-	@Column(name = "person_born_date", nullable = false)
+	@Column(name = "person_born_date")
 	private LocalDate bornDate;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "person_genre", nullable = false)
+	@Column(name = "person_genre")
 	private GenreEnum genre;
 	
 	@Enumerated(EnumType.STRING)

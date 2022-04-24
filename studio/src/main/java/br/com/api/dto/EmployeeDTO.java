@@ -1,5 +1,7 @@
 package br.com.api.dto;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -19,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 public class EmployeeDTO {
 
 	private Integer identifier;
-	private PersonDTO individual;
+	private PersonDTO person;
 	private Boolean medicinContinuous;
 	private String medicinNotes;
 	private Boolean allergiesContinuous;
@@ -34,4 +36,7 @@ public class EmployeeDTO {
 	private EmployeeStatusEnum status;
 	private Double salaryValue;
 	private String password;
+	private LocalDate creationDate;
+	private LocalDate admissionDate;
+	private LocalDate demissionDate;
 }

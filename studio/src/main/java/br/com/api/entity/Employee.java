@@ -1,6 +1,7 @@
 package br.com.api.entity;
 
-import javax.persistence.CascadeType;
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -29,8 +30,8 @@ public class Employee {
 	@Column(name = "employee_id")
 	private Integer identifier;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
-	@JoinColumn(name = "person_id", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "person_id")
 	private Person person;
 
 	@Column(name = "employee_medicin_continuous", nullable = false)
@@ -77,4 +78,13 @@ public class Employee {
 
 	@Column(name = "employee_password")
 	private String password;
+	
+	@Column(name = "employee_creation_date")
+	private LocalDate creationDate;
+	
+	@Column(name = "employee_admission_date")
+	private LocalDate admissionDate;
+
+	@Column(name = "employee_demission_date")
+	private LocalDate demissionDate;
 }

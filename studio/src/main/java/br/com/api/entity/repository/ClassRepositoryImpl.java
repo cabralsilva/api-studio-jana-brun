@@ -41,9 +41,9 @@ public class ClassRepositoryImpl extends RepositoryCustom {
 				predicate = criteriaBuilder.equal(entity.get("identifier"), filter.getExample().getIdentifier());
 			}
 
-			if (Objects.nonNull(filter.getExample().getName())) {
+			if (Objects.nonNull(filter.getExample().getDescription())) {
 				predicate = criteriaBuilder.and(predicate,
-						criteriaBuilder.like(entity.get("name"), "%" + filter.getExample().getName() + "%"));
+						criteriaBuilder.like(entity.get("description"), "%" + filter.getExample().getDescription() + "%"));
 			}
 
 		}

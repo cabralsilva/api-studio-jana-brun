@@ -23,9 +23,9 @@ public class InsertNoticeFlow {
 	@Autowired
 	private MessageSource messageSource;
 
-	public ResponseAPI execute(NoticeDTO noticeDTO, HttpHeaders headers) {
+	public ResponseAPI<NoticeDTO> execute(NoticeDTO noticeDTO, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<NoticeDTO> response = ResponseAPI.<NoticeDTO>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			response.setData(insertNoticeFlowItem.insert(noticeDTO));

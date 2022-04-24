@@ -25,9 +25,10 @@ public class FindEmployeeByFilterFlow {
 	@Autowired
 	private MessageSource messageSource;
 
-	public ResponseAPI execute(EmployeeFilter filter, HttpHeaders headers) {
+	public ResponseAPI<EmployeeFilter> execute(EmployeeFilter filter, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<EmployeeFilter> response = ResponseAPI.<EmployeeFilter>builder()
+				.friendlyMessagesList(new ArrayList<>()).build();
 		try {
 			response.setData(findEmployeeByFilterFlowItem.findByFilter(filter));
 			response.setStatus(StatusResponse.SUCCESS);
@@ -41,6 +42,7 @@ public class FindEmployeeByFilterFlow {
 							.getMessage(e.getMessage(), null, Utils.getLocale(headers.getAcceptLanguageAsLocales())))
 					.exception(e).build());
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setStatus(StatusResponse.ERROR);
 
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())

@@ -16,5 +16,5 @@ import lombok.experimental.SuperBuilder;
 public class ClassroomDTO {
 
 	private Integer identifier;
-	private String name;
+	private String description;
 }

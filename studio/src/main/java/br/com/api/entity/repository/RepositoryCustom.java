@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -39,7 +40,7 @@ public class RepositoryCustom {
 		if (Objects.isNull(filter.getColumnList()) || filter.getColumnList().isEmpty()) {
 			List<Field> fieldList = new ArrayList<>(Arrays.asList(clazz.getDeclaredFields()));
 			fieldList.removeIf(i -> !Constants.PRIMITIVE_CLASSES.contains(i.getType()) && !i.getType().isEnum());
-			filter.setColumnList(fieldList.stream().map(Field::getName).toList());
+			filter.setColumnList(fieldList.stream().map(Field::getName).collect(Collectors.toList()));
 		}
 	}
 
@@ -305,7 +306,7 @@ public class RepositoryCustom {
 				selectionsList.add(cb.coalesce(cb.sumAsDouble(root.get(sumAsDoubleSplit.get(1))), 0D)
 						.alias(propertySource + sumAsDoubleSplit.get(1)));
 
-			} else if (StringUtils.startsWith(propertySplit.get(0), "count")) {
+			} else if (StringUtils.startsWith(propertySplit.get(0), "countBy")) {
 				List<String> countSplit = new ArrayList<String>(Arrays.asList(propertyRequired.split("count")));
 				selectionsList.add(cb.countDistinct(root).alias(propertySource + countSplit.get(1)));
 
@@ -352,7 +353,8 @@ public class RepositoryCustom {
 	}
 
 	public Object generateEntity(Class<?> clazz, List<String> propertiesRequired, String propertySource, Tuple tuple)
-			throws InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException {
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			NoSuchMethodException, SecurityException {
 
 		Object entity = null;
 		for (String propertyRequired : propertiesRequired) {
@@ -363,8 +365,8 @@ public class RepositoryCustom {
 				propertyRequired = propertyRequired.split("groupBy")[1];
 			if (StringUtils.startsWith(propertySplit.get(0), "sumAsDouble"))
 				propertyRequired = propertyRequired.split("sumAsDouble")[1];
-			if (StringUtils.startsWith(propertySplit.get(0), "count"))
-				propertyRequired = propertyRequired.split("count")[1];
+			if (StringUtils.startsWith(propertySplit.get(0), "countBy"))
+				propertyRequired = propertyRequired.split("countBy")[1];
 
 			if (propertySplit.size() == 1) {
 
@@ -376,7 +378,7 @@ public class RepositoryCustom {
 
 					if (value != null) {
 						if (entity == null)
-							entity = clazz.newInstance();
+							entity = clazz.getDeclaredConstructor().newInstance();
 
 						ReflectionUtils.setField(field, entity, tuple.get(alias, field.getType()));
 					}
@@ -397,8 +399,10 @@ public class RepositoryCustom {
 		return entity;
 	}
 
+	@SuppressWarnings("deprecation")
 	public Object instanceEntity(Object object, Class<?> clazz, String property, Tuple tuple, String alias)
-			throws InstantiationException, IllegalAccessException {
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			NoSuchMethodException, SecurityException {
 
 		List<String> propertySplit = new ArrayList<String>(Arrays.asList(property.split("\\.")));
 		Field field = ReflectionUtils.findField(clazz, propertySplit.get(0));
@@ -412,17 +416,17 @@ public class RepositoryCustom {
 			Object value = tuple.get(alias, field.getType());
 			if (value != null) {
 				if (object == null) {
-					object = clazz.newInstance();
+					object = clazz.getDeclaredConstructor().newInstance();
 				}
 				ReflectionUtils.setField(field, object, value);
 			}
 		}
 		propertySplit.remove(0);
 
-		if (propertySplit.size() > 0) {
+		if (!propertySplit.isEmpty()) {
 			Object objectAux = instanceEntity(obj, field.getType(), String.join(".", propertySplit), tuple, alias);
 			if (objectAux != null && object == null) {
-				object = clazz.newInstance();
+				object = clazz.getDeclaredConstructor().newInstance();
 			}
 			if (object != null)
 				ReflectionUtils.setField(field, object, objectAux);

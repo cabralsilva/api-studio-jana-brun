@@ -45,7 +45,7 @@ public class StudentController {
 		return ResponseEntity.ok(updateStudentFlow.execute(studentDTO, headers));
 	}
 
-	@PostMapping("/find")
+	@PostMapping("/search")
 	public ResponseEntity<ResponseAPI> find(@RequestBody StudentFilter filter, @RequestHeader HttpHeaders headers) {
 
 		return ResponseEntity.ok(findStudentByFilterFlow.execute(filter, headers));

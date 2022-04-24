@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.api.dto.PersonDTO;
 import br.com.api.enums.LevelReport;
@@ -24,20 +25,20 @@ public class InsertPersonFlow {
 	@Autowired
 	private MessageSource messageSource;
 
-
 	@Autowired
 	private CheckAddressFlow checkAddressFlow;
 	@Autowired
 	private CheckPersonFlow checkPersonFlow;
-	
-	public ResponseAPI execute(PersonDTO personDTO, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+	public ResponseAPI<PersonDTO> execute(PersonDTO personDTO, HttpHeaders headers) throws Exception {
+
+		ResponseAPI<PersonDTO> response = ResponseAPI.<PersonDTO>builder().friendlyMessagesList(new ArrayList<>())
+				.build();
 
 		try {
 			checkAddressFlow.execute(personDTO.getAddress());
 			checkPersonFlow.execute(personDTO);
-			
+
 			response.setData(insertPersonFlowItem.insert(personDTO));
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (Exception e) {
@@ -45,6 +46,7 @@ public class InsertPersonFlow {
 
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())
 					.message(e.getLocalizedMessage()).exception(e).build());
+			throw e;
 		}
 
 		return response;

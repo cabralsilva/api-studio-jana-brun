@@ -35,29 +35,29 @@ public class Student {
 	private Person person;
 
 	@ManyToOne
-	@JoinColumn(name = "school_id", nullable = false)
+	@JoinColumn(name = "school_id")
 	private Person school;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "student_school_level", nullable = false)
+	@Column(name = "student_school_level")
 	private SchoolLevelEnum schoolLevel;
 
-	@Column(name = "student_medicin_continuous", nullable = false)
+	@Column(name = "student_medicin_continuous")
 	private Boolean medicinContinuous;
 
 	@Column(name = "student_medicin_notes")
 	private String medicinNotes;
 
-	@Column(name = "student_allergies_continuous", nullable = false)
+	@Column(name = "student_allergies_continuous")
 	private Boolean allergiesContinuous;
 
 	@Column(name = "student_allergies_notes")
 	private String allergiesNotes;
 
-	@Column(name = "student_responsible_email", nullable = false)
+	@Column(name = "student_responsible_email")
 	private String responsibleEmail;
 
-	@Column(name = "student_responsible_phone1", nullable = false)
+	@Column(name = "student_responsible_phone1")
 	private String responsiblePhone1;
 
 	@Column(name = "student_responsible_phone2")

@@ -18,9 +18,9 @@ public class DeleteClassByIdentifierFlow {
 	@Autowired
 	private DeleteClassFlowItem deleteClassFlowItem;
 
-	public ResponseAPI execute(Integer identifier , HttpHeaders headers) {
+	public ResponseAPI<Void> execute(Integer identifier , HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<Void> response = ResponseAPI.<Void>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			deleteClassFlowItem.delete(identifier);

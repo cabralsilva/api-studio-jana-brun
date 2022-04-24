@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.api.dto.CityDTO;
 import br.com.api.entity.repository.CityFilter;
 import br.com.api.exceptions.FindByFilterException;
+import lombok.var;
 
 @Service
 public class CheckCityFlowItem {

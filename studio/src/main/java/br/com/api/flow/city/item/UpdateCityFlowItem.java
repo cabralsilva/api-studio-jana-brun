@@ -3,21 +3,21 @@ package br.com.api.flow.city.item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.api.converter.CountryMapper;
-import br.com.api.dto.CountryDTO;
-import br.com.api.entity.repository.CountryRepository;
+import br.com.api.converter.CityMapper;
+import br.com.api.dto.CityDTO;
+import br.com.api.entity.repository.CityRepository;
 
 @Component
 public class UpdateCityFlowItem {
 
 	@Autowired
-	private CountryRepository countryRepository;
+	private CityRepository cityRepository;
 
 	@Autowired
-	private CountryMapper countryMapper;
+	private CityMapper cityMapper;
 
-	public CountryDTO update(CountryDTO country) {
+	public CityDTO update(CityDTO city) {
 
-		return countryMapper.toDTO(countryRepository.save(countryMapper.toEntity(country)));
+		return cityMapper.toDTO(cityRepository.save(cityMapper.toEntity(city)));
 	}
 }

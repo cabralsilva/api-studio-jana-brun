@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import br.com.api.dto.PersonDTO;
 import br.com.api.dto.StudentDTO;
 import br.com.api.enums.LevelReport;
 import br.com.api.enums.StatusResponse;
+import br.com.api.flow.person.UpdatePersonFlow;
 import br.com.api.flow.student.item.UpdateStudentFlowItem;
 import br.com.api.utils.ReportTech;
 import br.com.api.utils.ResponseAPI;
@@ -18,12 +20,20 @@ public class UpdateStudentFlow {
 
 	@Autowired
 	private UpdateStudentFlowItem updateStudentFlowItem;
+	@Autowired
+	private UpdatePersonFlow updatePersonFlow;
 
-	public ResponseAPI execute(StudentDTO studentDTO, HttpHeaders headers) {
+	public ResponseAPI<StudentDTO> execute(StudentDTO studentDTO, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<StudentDTO> response = ResponseAPI.<StudentDTO>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
+			studentDTO.setPerson(PersonDTO.builder()
+					.identifier(updatePersonFlow.execute(studentDTO.getPerson(), headers).getData().getIdentifier())
+					.build());
+			studentDTO.setResponsible(PersonDTO.builder()
+					.identifier(updatePersonFlow.execute(studentDTO.getResponsible(), headers).getData().getIdentifier())
+					.build());
 			response.setData(updateStudentFlowItem.update(studentDTO));
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (Exception e) {

@@ -1,50 +1,36 @@
 package br.com.api.flow.classes.item;
 
-import static br.com.api.exceptions.FindByFilterExceptionEnum.MORE_THAN_ONE_REGISTER_FOUND;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import br.com.api.converter.ClassMapper;
 import br.com.api.entity.Class;
 import br.com.api.entity.repository.ClassFilter;
+import br.com.api.entity.repository.ClassRepository;
 import br.com.api.entity.repository.ClassRepositoryImpl;
-import br.com.api.exceptions.FindByFilterException;
+import lombok.var;
 
 @Component
 public class FindClassByFilterFlowItem {
 
 	@Autowired
-	private ClassRepositoryImpl stateRepositoryImpl;
+	private ClassRepositoryImpl classRepositoryImpl;
 
 	@Autowired
-	private ClassMapper stateMapper;
+	private ClassRepository classRepository;
 
-	public ClassFilter findByFilter(ClassFilter filter)
-			throws FindByFilterException, NoSuchMethodException, SecurityException, IllegalArgumentException,
-			IllegalAccessException, InvocationTargetException, InstantiationException {
+	@Autowired
+	private ClassMapper classMapper;
 
-		if (Boolean.TRUE.equals(filter.getPageable())) {
-			Page<Class> entities = stateRepositoryImpl.findByFilter(filter,
-					PageRequest.of(filter.getCurrentPage(), filter.getSizePage()));
+	public ClassFilter findByFilter(ClassFilter filter) {
 
-			filter.setResult(entities.map(entity -> stateMapper.toDTO(entity)).toList());
-			filter.setTotal(Math.toIntExact(entities.getTotalElements()));
-			filter.setTotalPages(Math.toIntExact(entities.getTotalPages()));
-			filter.setLast(entities.isLast());
-		} else {
-			List<Class> entities = stateRepositoryImpl.findByFilter(filter);
-			filter.setResult(entities.stream().map(entity -> stateMapper.toDTO(entity)).toList());
-		}
-
-		if (Boolean.TRUE.equals(filter.getResultUnique()) && filter.getResult().size() > 1) {
-			throw new FindByFilterException(MORE_THAN_ONE_REGISTER_FOUND);
-		}
+		Example<Class> example = Example.of(classMapper.toEntity(filter.getExample()));
+		final var ret = classRepository.findAll(example, PageRequest.of(filter.getCurrentPage(), filter.getSizePage()));
+		filter.setResult(ret.stream().map(p -> classMapper.toDTO(p)).collect(Collectors.toList()));
 
 		return filter;
 	}

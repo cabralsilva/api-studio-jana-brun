@@ -3,7 +3,6 @@ package br.com.api.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import br.com.api.entity.Person;
 import br.com.api.enums.SchoolLevelEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 public class StudentDTO {
 
 	private Integer identifier;
-	private Person person;
+	private PersonDTO person;
 	private PersonDTO responsible;
 	private PersonDTO school;
 	private SchoolLevelEnum schoolLevel;

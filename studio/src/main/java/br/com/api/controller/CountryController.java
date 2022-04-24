@@ -3,6 +3,7 @@ package br.com.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import br.com.api.utils.ResponseAPI;
 
 @RestController
 @RequestMapping(path = "/country")
+@CrossOrigin
 public class CountryController {
 
 	@Autowired
@@ -45,8 +47,8 @@ public class CountryController {
 		return ResponseEntity.ok(updateCountryFlow.execute(countryDTO, headers));
 	}
 
-	@PostMapping("/find")
-	public ResponseEntity<ResponseAPI> find(@RequestBody CountryFilter filter, @RequestHeader HttpHeaders headers) {
+	@PostMapping("/search")
+	public ResponseEntity<ResponseAPI<CountryFilter>> find(@RequestBody CountryFilter filter, @RequestHeader HttpHeaders headers) {
 
 		return ResponseEntity.ok(findCountryByFilterFlow.execute(filter, headers));
 	}

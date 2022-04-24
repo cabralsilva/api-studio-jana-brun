@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.api.dto.PersonDTO;
 import br.com.api.enums.LevelReport;
 import br.com.api.enums.StatusResponse;
+import br.com.api.flow.address.CheckAddressFlow;
 import br.com.api.flow.person.item.UpdatePersonFlowItem;
 import br.com.api.utils.ReportTech;
 import br.com.api.utils.ResponseAPI;
@@ -19,12 +20,19 @@ public class UpdatePersonFlow {
 	@Autowired
 	private UpdatePersonFlowItem updatePersonFlowItem;
 
-	public ResponseAPI execute(PersonDTO noticeDTO, HttpHeaders headers) {
+	@Autowired
+	private CheckAddressFlow checkAddressFlow;
+	@Autowired
+	private CheckPersonFlow checkPersonFlow;
+	
+	public ResponseAPI<PersonDTO> execute(PersonDTO personDTO, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<PersonDTO> response = ResponseAPI.<PersonDTO>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
-			response.setData(updatePersonFlowItem.update(noticeDTO));
+			checkAddressFlow.execute(personDTO.getAddress());
+			checkPersonFlow.execute(personDTO);
+			response.setData(updatePersonFlowItem.update(personDTO));
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (Exception e) {
 			response.setStatus(StatusResponse.ERROR);

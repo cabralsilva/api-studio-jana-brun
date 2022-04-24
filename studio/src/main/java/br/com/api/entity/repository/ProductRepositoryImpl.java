@@ -40,9 +40,9 @@ public class ProductRepositoryImpl extends RepositoryCustom {
 			if (Objects.nonNull(filter.getExample().getIdentifier())) {
 				predicate = criteriaBuilder.equal(entity.get("identifier"), filter.getExample().getIdentifier());
 			}
-			
-			if (Objects.nonNull(filter.getExample().getName())) {
-				predicate = criteriaBuilder.equal(entity.get("name"), filter.getExample().getName());
+
+			if (Objects.nonNull(filter.getExample().getCode())) {
+				predicate = criteriaBuilder.equal(entity.get("code"), filter.getExample().getCode());
 			}
 		}
 
@@ -51,8 +51,9 @@ public class ProductRepositoryImpl extends RepositoryCustom {
 		/* other filters */
 
 		if (StringUtils.isNotEmpty(filter.getGlobalFilter())) {
-			Predicate name = criteriaBuilder.like(entity.get("name"), "%" + filter.getGlobalFilter() + "%");
-			Predicate description = criteriaBuilder.like(entity.get("description"), "%" + filter.getGlobalFilter() + "%");
+			Predicate name = criteriaBuilder.like(entity.get("code"), "%" + filter.getGlobalFilter() + "%");
+			Predicate description = criteriaBuilder.like(entity.get("description"),
+					"%" + filter.getGlobalFilter() + "%");
 
 			predicate = criteriaBuilder.and(predicate, criteriaBuilder.or(name, description));
 
@@ -86,8 +87,8 @@ public class ProductRepositoryImpl extends RepositoryCustom {
 		Long total = count(filter);
 
 		Predicate conditions = this.filters(filter, criteriaBuilder, root);
-		List<Selection<?>> selectionsList = super.selections(this, Product.class, filter.getColumnList(),
-				"product.", root, criteriaQueryTuple, criteriaBuilder);
+		List<Selection<?>> selectionsList = super.selections(this, Product.class, filter.getColumnList(), "product.",
+				root, criteriaQueryTuple, criteriaBuilder);
 
 		criteriaQueryTuple.multiselect(selectionsList);
 		criteriaQueryTuple.where(conditions);
@@ -103,8 +104,7 @@ public class ProductRepositoryImpl extends RepositoryCustom {
 
 		List<Product> rootList = new ArrayList<>();
 		for (Tuple tuple : typedQuery.getResultList()) {
-			rootList.add(
-					(Product) super.generateEntity(Product.class, filter.getColumnList(), "product.", tuple));
+			rootList.add((Product) super.generateEntity(Product.class, filter.getColumnList(), "product.", tuple));
 		}
 		return new PageImpl<>(rootList, page, total);
 	}
@@ -119,8 +119,8 @@ public class ProductRepositoryImpl extends RepositoryCustom {
 		Root<Product> root = criteriaQueryTuple.from(Product.class);
 		Predicate conditions = this.filters(filter, criteriaBuilder, root);
 
-		List<Selection<?>> selectionsList = super.selections(this, Product.class, filter.getColumnList(),
-				"product.", root, criteriaQueryTuple, criteriaBuilder);
+		List<Selection<?>> selectionsList = super.selections(this, Product.class, filter.getColumnList(), "product.",
+				root, criteriaQueryTuple, criteriaBuilder);
 
 		criteriaQueryTuple.multiselect(selectionsList);
 		criteriaQueryTuple.where(conditions);
@@ -131,10 +131,8 @@ public class ProductRepositoryImpl extends RepositoryCustom {
 
 		List<Product> rootList = new ArrayList<>();
 		for (Tuple tuple : typedQuery.getResultList()) {
-			rootList.add(
-					(Product) super.generateEntity(Product.class, filter.getColumnList(), "product.", tuple));
+			rootList.add((Product) super.generateEntity(Product.class, filter.getColumnList(), "product.", tuple));
 		}
 		return rootList;
 	}
-
 }

@@ -33,6 +33,8 @@ public class CheckAddressFlow {
 	public AddressDTO execute(AddressDTO addressDTO) throws Exception {
 
 		try {
+			if (addressDTO == null)
+				return addressDTO;
 			checkCountry(addressDTO);
 			checkState(addressDTO);
 			checkCity(addressDTO);

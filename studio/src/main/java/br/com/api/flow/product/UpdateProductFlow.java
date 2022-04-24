@@ -19,9 +19,9 @@ public class UpdateProductFlow {
 	@Autowired
 	private UpdateProductFlowItem updateProductFlowItem;
 
-	public ResponseAPI execute(ProductDTO productDTO, HttpHeaders headers) {
+	public ResponseAPI<ProductDTO> execute(ProductDTO productDTO, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<ProductDTO> response = ResponseAPI.<ProductDTO>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			response.setData(updateProductFlowItem.update(productDTO));
