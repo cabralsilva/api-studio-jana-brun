@@ -28,6 +28,6 @@ public class InsertPersonFlowItem {
 			return updatePersonFlowItem.update(person);
 		}
 
-		return personMapper.toDTO(personRepository.save(personMapper.toEntity(person)));
+		return personMapper.toDTO(personRepository.saveAndFlush(personMapper.toEntity(person)));
 	}
 }

@@ -15,13 +15,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ResponseAPI implements Serializable {
+public class ResponseAPI<T> implements Serializable {
 
 	private static final long serialVersionUID = -4521521671669354355L;
 
 	private StatusResponse status;
 	private List<String> friendlyMessagesList;
-	private Object data;
+	private T data;
 	private ReportTech reportTech;
 
 }

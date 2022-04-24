@@ -17,4 +17,5 @@ public class GrateItemDTO {
 
 	private Integer identifier;
 	private String value;
+	private GrateDTO grate;
 }

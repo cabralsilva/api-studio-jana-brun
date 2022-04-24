@@ -13,7 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.api.enums.NoticeTypeEnum;
+import br.com.api.enums.StatusActiveEnum;
+import br.com.api.enums.TypeOfNoticeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,7 +40,7 @@ public class Notice {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "notice_type", nullable = false)
-	private NoticeTypeEnum type;
+	private TypeOfNoticeEnum type;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "notice_start_date")
@@ -48,4 +49,8 @@ public class Notice {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "notice_end_date")
 	private Calendar endDate;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "notice_status")
+	private StatusActiveEnum status;
 }

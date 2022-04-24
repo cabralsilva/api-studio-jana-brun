@@ -23,9 +23,9 @@ public class InsertGrateFlow {
 	@Autowired
 	private MessageSource messageSource;
 
-	public ResponseAPI execute(GrateDTO countryDTO, HttpHeaders headers) {
+	public ResponseAPI<GrateDTO> execute(GrateDTO countryDTO, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<GrateDTO> response = ResponseAPI.<GrateDTO>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			response.setData(insertGrateFlowItem.insert(countryDTO));

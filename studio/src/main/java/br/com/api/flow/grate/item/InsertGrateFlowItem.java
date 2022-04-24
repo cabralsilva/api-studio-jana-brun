@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import br.com.api.converter.GrateMapper;
 import br.com.api.dto.GrateDTO;
+import br.com.api.dto.GrateItemDTO;
 import br.com.api.entity.repository.GrateRepository;
+import br.com.api.flow.grateitem.item.InsertGrateItemFlowItem;
 
 @Component
 public class InsertGrateFlowItem {
@@ -18,16 +20,26 @@ public class InsertGrateFlowItem {
 
 	@Autowired
 	private UpdateGrateFlowItem updateGrateFlowItem;
+	
+	@Autowired
+	private InsertGrateItemFlowItem grateItemFlowItem;
 
 	@Autowired
 	private GrateMapper grateMapper;
 
-	public GrateDTO insert(@NonNull GrateDTO grate) {
+	public GrateDTO insert(@NonNull GrateDTO grateDTO) {
 
-		if (Objects.nonNull(grate.getIdentifier())) {
-			return updateGrateFlowItem.update(grate);
+		if (Objects.nonNull(grateDTO.getIdentifier())) {
+			return updateGrateFlowItem.update(grateDTO);
 		}
 
-		return grateMapper.toDTO(grateRepository.save(grateMapper.toEntity(grate)));
+		final GrateDTO grateDTOAux = grateMapper.toDTO(grateRepository.save(grateMapper.toEntity(grateDTO)));
+		
+		for (GrateItemDTO grateItem : grateDTO.getItemList()) {
+			grateItem.setGrate(GrateDTO.builder().identifier(grateDTOAux.getIdentifier()).build());
+			grateItem = grateItemFlowItem.insert(grateItem);
+		}
+		
+		return grateDTOAux;
 	}
 }

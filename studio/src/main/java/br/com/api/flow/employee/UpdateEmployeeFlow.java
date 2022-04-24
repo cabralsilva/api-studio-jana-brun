@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.api.dto.EmployeeDTO;
+import br.com.api.dto.PersonDTO;
 import br.com.api.enums.LevelReport;
 import br.com.api.enums.StatusResponse;
 import br.com.api.flow.employee.item.UpdateEmployeeFlowItem;
+import br.com.api.flow.person.UpdatePersonFlow;
 import br.com.api.utils.ReportTech;
 import br.com.api.utils.ResponseAPI;
 
@@ -18,12 +21,18 @@ public class UpdateEmployeeFlow {
 
 	@Autowired
 	private UpdateEmployeeFlowItem updateEmployeeFlowItem;
+	@Autowired
+	private UpdatePersonFlow updatePersonFlow;
 
-	public ResponseAPI execute(EmployeeDTO employeeDTO, HttpHeaders headers) {
+	@Transactional	
+	public ResponseAPI<EmployeeDTO> execute(EmployeeDTO employeeDTO, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<EmployeeDTO> response = ResponseAPI.<EmployeeDTO>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
+			employeeDTO.setPerson(PersonDTO.builder()
+					.identifier(updatePersonFlow.execute(employeeDTO.getPerson(), headers).getData().getIdentifier())
+					.build());
 			response.setData(updateEmployeeFlowItem.update(employeeDTO));
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (Exception e) {

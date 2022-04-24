@@ -22,7 +22,9 @@ import lombok.experimental.SuperBuilder;
 public class ClassDTO {
 
 	private Integer identifier;
-	private String name;
+	private String code;
+	private String description;
+	private String inviteWhatsAppGroup;
 	private Set<Employee> teacherList;
 	private Set<Product> productList;
 	private Set<Student> studentList;

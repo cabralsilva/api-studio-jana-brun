@@ -21,6 +21,6 @@ public class Classroom {
 	@Column(name = "classroom_id")
 	private Integer identifier;
 
-	@Column(name = "classroom_name", nullable = false)
-	private String name;
+	@Column(name = "classroom_description")
+	private String description;
 }

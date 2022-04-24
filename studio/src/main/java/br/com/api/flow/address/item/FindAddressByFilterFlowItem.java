@@ -1,9 +1,10 @@
 package br.com.api.flow.address.item;
 
-import static br.com.api.exceptions.FindByFilterExceptionEnum.MORE_THAN_ONE_REGISTER_FOUND;
+import static br.com.api.exceptions.FindByFilterExceptionEnum.MORE_THAN_ONE_matriculation_FOUND;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,11 +40,11 @@ public class FindAddressByFilterFlowItem {
 			filter.setLast(entities.isLast());
 		} else {
 			List<Address> entities = addressRepositoryImpl.findByFilter(filter);
-			filter.setResult(entities.stream().map(entity -> addressMapper.toDTO(entity)).toList());
+			filter.setResult(entities.stream().map(entity -> addressMapper.toDTO(entity)).collect(Collectors.toList()));
 		}
 
 		if (Boolean.TRUE.equals(filter.getResultUnique()) && filter.getResult().size() > 1) {
-			throw new FindByFilterException(MORE_THAN_ONE_REGISTER_FOUND);
+			throw new FindByFilterException(MORE_THAN_ONE_matriculation_FOUND);
 		}
 
 		return filter;

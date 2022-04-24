@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.api.dto.GrateDTO;
 import br.com.api.entity.repository.GrateFilter;
 import br.com.api.exceptions.FindByFilterException;
+import lombok.var;
 
 @Service
 public class CheckGrateFlowItem {
@@ -22,7 +23,7 @@ public class CheckGrateFlowItem {
 		final var filter = new GrateFilter();
 		filter.setExample(grateDTO);
 		filter.setPageable(Boolean.FALSE);
-		
+
 		final var existing = findGrateByFilterFlowItem.findByFilter(filter).getResult().stream().findFirst();
 
 		if (existing.isPresent()) {

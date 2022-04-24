@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.api.dto.NeighborhoodDTO;
 import br.com.api.entity.repository.NeighborhoodFilter;
 import br.com.api.exceptions.FindByFilterException;
+import lombok.var;
 
 @Service
 public class CheckNeighborhoodFlowItem {

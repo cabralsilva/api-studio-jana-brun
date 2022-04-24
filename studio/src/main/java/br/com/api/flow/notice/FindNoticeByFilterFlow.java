@@ -25,9 +25,9 @@ public class FindNoticeByFilterFlow {
 	@Autowired
 	private MessageSource messageSource;
 
-	public ResponseAPI execute(NoticeFilter filter, HttpHeaders headers) {
+	public ResponseAPI<NoticeFilter> execute(NoticeFilter filter, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<NoticeFilter> response = ResponseAPI.<NoticeFilter>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			response.setData(findNoticeByFilterFlowItem.findByFilter(filter));

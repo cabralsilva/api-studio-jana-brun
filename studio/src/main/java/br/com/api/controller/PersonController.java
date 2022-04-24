@@ -34,18 +34,18 @@ public class PersonController {
 	private DeletePersonByIdentifierFlow deletePersonByIdentifierFlow;
 
 	@PostMapping
-	public ResponseEntity<ResponseAPI> insert(@RequestBody PersonDTO personDTO, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<PersonDTO>> insert(@RequestBody PersonDTO personDTO, @RequestHeader HttpHeaders headers) throws Exception {
 
 		return ResponseEntity.ok(insertPersonFlow.execute(personDTO, headers));
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseAPI> update(@RequestBody PersonDTO personDTO, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<PersonDTO>> update(@RequestBody PersonDTO personDTO, @RequestHeader HttpHeaders headers) {
 
 		return ResponseEntity.ok(updatePersonFlow.execute(personDTO, headers));
 	}
 
-	@PostMapping("/find")
+	@PostMapping("/search")
 	public ResponseEntity<ResponseAPI> find(@RequestBody PersonFilter filter, @RequestHeader HttpHeaders headers) {
 
 		return ResponseEntity.ok(findPersonByFilterFlow.execute(filter, headers));

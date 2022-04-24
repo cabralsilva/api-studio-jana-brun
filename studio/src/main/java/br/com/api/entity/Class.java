@@ -32,8 +32,14 @@ public class Class {
 	@Column(name = "class_id")
 	private Integer identifier;
 
-	@Column(name = "class_name", nullable = false)
-	private String name;
+	@Column(name = "class_code")
+	private String code;
+	
+	@Column(name = "class_description")
+	private String description;
+	
+	@Column(name = "class_invite_whatsapp_group")
+	private String inviteWhatsAppGroup;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "class_teacher", joinColumns = { @JoinColumn(name = "class_id") }, inverseJoinColumns = {

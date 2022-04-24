@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.api.dto.CountryDTO;
 import br.com.api.entity.repository.CountryFilter;
 import br.com.api.exceptions.FindByFilterException;
+import lombok.var;
 
 @Service
 public class CheckCountryFlowItem {

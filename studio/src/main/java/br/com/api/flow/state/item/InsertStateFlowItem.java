@@ -6,28 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-import br.com.api.converter.CountryMapper;
-import br.com.api.dto.CountryDTO;
-import br.com.api.entity.repository.CountryRepository;
+import br.com.api.converter.StateMapper;
+import br.com.api.dto.StateDTO;
+import br.com.api.entity.repository.StateRepository;
 
 @Component
 public class InsertStateFlowItem {
 
 	@Autowired
-	private CountryRepository countryRepository;
+	private StateRepository stateRepository;
 
 	@Autowired
-	private UpdateStateFlowItem updateCountryFlowItem;
+	private UpdateStateFlowItem updateStateFlowItem;
 
 	@Autowired
-	private CountryMapper countryMapper;
+	private StateMapper stateMapper;
 
-	public CountryDTO insert(@NonNull CountryDTO country) {
+	public StateDTO insert(@NonNull StateDTO state) {
 
-		if (Objects.nonNull(country.getIdentifier())) {
-			return updateCountryFlowItem.update(country);
+		if (Objects.nonNull(state.getIdentifier())) {
+			return updateStateFlowItem.update(state);
 		}
 
-		return countryMapper.toDTO(countryRepository.save(countryMapper.toEntity(country)));
+		return stateMapper.toDTO(stateRepository.save(stateMapper.toEntity(state)));
 	}
 }

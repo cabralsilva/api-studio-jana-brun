@@ -25,14 +25,15 @@ public class FindGrateByFilterFlow {
 	@Autowired
 	private MessageSource messageSource;
 
-	public ResponseAPI execute(GrateFilter filter, HttpHeaders headers) {
+	public ResponseAPI<GrateFilter> execute(GrateFilter filter, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<GrateFilter> response = ResponseAPI.<GrateFilter>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			response.setData(findGrateByFilterFlowItem.findByFilter(filter));
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (FindByFilterException e) {
+			e.printStackTrace();
 			response.setStatus(StatusResponse.ERROR);
 			response.getFriendlyMessagesList().add(messageSource.getMessage(e.getMessage(), null,
 					Utils.getLocale(headers.getAcceptLanguageAsLocales())));

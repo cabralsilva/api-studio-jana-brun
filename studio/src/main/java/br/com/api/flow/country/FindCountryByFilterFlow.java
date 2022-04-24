@@ -25,9 +25,9 @@ public class FindCountryByFilterFlow {
 	@Autowired
 	private MessageSource messageSource;
 
-	public ResponseAPI execute(CountryFilter filter, HttpHeaders headers) {
+	public ResponseAPI<CountryFilter> execute(CountryFilter filter, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<CountryFilter> response = ResponseAPI.<CountryFilter>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			response.setData(findCountryByFilterFlowItem.findByFilter(filter));

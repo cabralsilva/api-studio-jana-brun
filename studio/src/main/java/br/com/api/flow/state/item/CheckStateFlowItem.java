@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.api.dto.StateDTO;
 import br.com.api.entity.repository.StateFilter;
 import br.com.api.exceptions.FindByFilterException;
+import lombok.var;
 
 @Service
 public class CheckStateFlowItem {
@@ -22,7 +23,7 @@ public class CheckStateFlowItem {
 		final var filter = new StateFilter();
 		filter.setExample(stateDTO);
 		filter.setPageable(Boolean.FALSE);
-		
+
 		final var existing = findStateByFilterFlowItem.findByFilter(filter).getResult().stream().findFirst();
 
 		if (existing.isPresent()) {

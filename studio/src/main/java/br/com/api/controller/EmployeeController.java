@@ -3,6 +3,7 @@ package br.com.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import br.com.api.utils.ResponseAPI;
 
 @RestController
 @RequestMapping(path = "/employee")
+@CrossOrigin
 public class EmployeeController {
 
 	@Autowired
@@ -34,25 +36,27 @@ public class EmployeeController {
 	private DeleteEmployeeByIdentifierFlow deleteEmployeeByIdentifierFlow;
 
 	@PostMapping
-	public ResponseEntity<ResponseAPI> insert(@RequestBody EmployeeDTO employeeDTO, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<EmployeeDTO>> insert(@RequestBody EmployeeDTO employeeDTO,
+			@RequestHeader HttpHeaders headers) throws Exception {
 
 		return ResponseEntity.ok(insertEmployeeFlow.execute(employeeDTO, headers));
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseAPI> update(@RequestBody EmployeeDTO employeeDTO, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<EmployeeDTO>> update(@RequestBody EmployeeDTO employeeDTO,
+			@RequestHeader HttpHeaders headers) {
 
 		return ResponseEntity.ok(updateEmployeeFlow.execute(employeeDTO, headers));
 	}
 
-	@PostMapping("/find")
-	public ResponseEntity<ResponseAPI> find(@RequestBody EmployeeFilter filter, @RequestHeader HttpHeaders headers) {
+	@PostMapping("/search")
+	public ResponseEntity<ResponseAPI<EmployeeFilter>> find(@RequestBody EmployeeFilter filter, @RequestHeader HttpHeaders headers) {
 
 		return ResponseEntity.ok(findEmployeeByFilterFlow.execute(filter, headers));
 	}
-	
+
 	@DeleteMapping("/{identifier}")
-	public ResponseEntity<ResponseAPI> delete(@PathVariable Integer identifier, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<Void>> delete(@PathVariable Integer identifier, @RequestHeader HttpHeaders headers) {
 
 		return ResponseEntity.ok(deleteEmployeeByIdentifierFlow.execute(identifier, headers));
 	}
