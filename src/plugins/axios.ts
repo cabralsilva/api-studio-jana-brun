@@ -3,8 +3,8 @@ import EventBus from '@/store/enventBus'
 import store from '@/store/store'
 
 const apiClient: AxiosInstance = axios.create({
-  // baseURL: 'https://api-studio-jana-brun.ue.r.appspot.com/',
-  baseURL: 'http://localhost:8082/',
+  baseURL: 'https://api-studio-jana-brun.ue.r.appspot.com/',
+  // baseURL: 'http://localhost:8082/',
   headers: {
     'Content-type': 'application/json'
   }
