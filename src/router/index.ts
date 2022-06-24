@@ -34,6 +34,7 @@ import PriceTableListView from '@/views/product/price-table/PriceTableListView.v
 import PayrollFormView from '@/views/financial/bill-to-pay/payroll/PayrollFormView.vue'
 import PayrollListView from '@/views/financial/bill-to-pay/payroll/PayrollListView.vue'
 import BillToPayReportView from '@/views/financial/bill-to-pay/report/BillToPayReportView.vue'
+import BillToReceiveReportView from '@/views/financial/bill-to-receive/report/BillToReceiveReportView.vue'
 import IndexView from '@/views/Index.vue'
 import { lsUserDetailsKey } from '@/store/global'
 
@@ -259,6 +260,11 @@ const routes: Array<RouteConfig> = [
         path: '/panel/financial/bill-to-receive/edit/:identifier',
         name: 'Painel administrativo | Studio Jana Brun | Editar conta a receber',
         component: BillToReceiveFormView
+      },
+      {
+        path: '/panel/financial/bill-to-receive/report',
+        name: 'Painel administrativo | Studio Jana Brun | Relatótios/Consultas contas a receber',
+        component: BillToReceiveReportView
       },
       {
         path: '/panel/register/product/price-table',

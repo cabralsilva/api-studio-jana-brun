@@ -22,7 +22,7 @@
         <template v-if="item.items">
           <v-list-group :disabled="!isAuthorized(item.roles)" :key="item.title" :prepend-icon="item.icon">
             <template v-slot:activator>
-              <v-list-item-title v-text="item.title" />
+              <v-list-item-title :disabled="!item.active" v-text="item.title" />
             </template>
             <template v-for="child1 in item.items">
               <template v-if="child1.items">
@@ -32,13 +32,13 @@
                       <v-list-item-title v-text="child1.title" class="pl-10"/>
                     </v-list-item-content>
                   </template>
-                  <v-list-item v-for="(child2, i) in child1.items" :disabled="!isAuthorized(child2.roles)" :key="i" link @click="$router.push(child2.to)">
+                  <v-list-item v-for="(child2, i) in child1.items" :disabled="!isAuthorized(child2.roles)" :key="i" link @click="child2.active ? $router.push(child2.to) : {}">
                     <v-list-item-title v-text="child2.title" class="pl-14"/>
                   </v-list-item>
                 </v-list-group>
               </template>
               <template v-else>
-                <v-list-item :disabled="!isAuthorized(child1.roles)" :key="child1.title" @click="$router.push(child1.to)">
+                <v-list-item :disabled="!isAuthorized(child1.roles)" :key="child1.title" @click="child1.active ? $router.push(child1.to) : {}">
                   <v-list-item-title v-text="child1.title" class="pl-10"/>
                 </v-list-item>
               </template>
@@ -46,7 +46,7 @@
           </v-list-group>
         </template>
         <template v-else>
-          <v-list-item :disabled="!isAuthorized(item.roles)" :key="item.title" @click="$router.push(item.to)">
+          <v-list-item :disabled="!isAuthorized(item.roles)" :key="item.title" @click="item.active ? $router.push(item.to) : {}">
             <v-list-item-icon>
               <v-icon v-text="item.icon" />
             </v-list-item-icon>
@@ -89,36 +89,41 @@ export default Vue.extend({
       items: [
         {
           title: 'Home',
-          active: true,
           icon: 'mdi-home',
-          to: '/panel'
+          to: '/panel',
+          active: true
         },
         {
           title: 'Cadastros',
           icon: 'mdi-book-edit',
+          active: true,
           items: [
             {
               title: 'Avisos',
               icon: 'mdi-sticker-text-outline',
               to: '/panel/register/notice',
-              roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+              roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+              active: true
             },
             {
               title: 'Financeiro',
               icon: 'mdi-sticker-text-outline',
               roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+              active: true,
               items: [
                 {
                   title: 'Forma de pagamento',
                   icon: 'mdi-sticker-text-outline',
                   to: '/panel/register/financial/payment-method',
-                  roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+                  roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+                  active: true
                 },
                 {
                   title: 'Condição de pagamento',
                   icon: 'mdi-sticker-text-outline',
                   to: '/panel/register/financial/payment-condition',
-                  roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+                  roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+                  active: true
                 }
               ]
             },
@@ -126,18 +131,21 @@ export default Vue.extend({
               title: 'Pessoas/Empresas',
               icon: 'mdi-sticker-text-outline',
               roles: ['ROLE_ADMIN'],
+              active: true,
               items: [
                 {
                   title: 'Fornecedores',
                   icon: 'mdi-sticker-text-outline',
                   to: '/panel/register/person/supplier',
-                  roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+                  roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+                  active: true
                 },
                 {
                   title: 'Funcionários',
                   icon: 'mdi-sticker-text-outline',
                   to: '/panel/register/person/employee',
-                  roles: ['ROLE_ADMIN']
+                  roles: ['ROLE_ADMIN'],
+                  active: true
                 }
               ]
             },
@@ -145,24 +153,28 @@ export default Vue.extend({
               title: 'Produto',
               icon: 'mdi-sticker-text-outline',
               roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+              active: true,
               items: [
                 {
                   title: 'Grade',
                   icon: 'mdi-sticker-text-outline',
                   to: '/panel/register/product/grate',
-                  roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+                  roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+                  active: true
                 },
                 {
                   title: 'Tabela de preço',
                   icon: 'mdi-sticker-text-outline',
                   to: '/panel/register/product/price-table',
-                  roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+                  roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+                  active: true
                 },
                 {
                   title: 'Produto',
                   icon: 'mdi-sticker-text-outline',
                   to: '/panel/register/product/product',
-                  roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+                  roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+                  active: true
                 }
               ]
             },
@@ -170,13 +182,15 @@ export default Vue.extend({
               title: 'Salas',
               icon: 'mdi-sticker-text-outline',
               to: '/panel/register/classroom',
-              roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+              roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+              active: true
             },
             {
               title: 'Turmas',
               icon: 'mdi-sticker-text-outline',
               to: '/panel/register/class',
-              roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+              roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+              active: true
             }
           ]
         },
@@ -184,29 +198,34 @@ export default Vue.extend({
           title: 'Financeiro',
           icon: 'mdi-finance',
           roles: ['ROLE_ADMIN'],
+          active: true,
           items: [
             {
               title: 'Contas a Pagar',
               icon: 'mdi-call-made',
               roles: ['ROLE_ADMIN'],
+              active: true,
               items: [
                 {
                   title: 'Contas a Pagar',
                   icon: 'mdi-call-made',
                   to: '/panel/financial/bill-to-pay',
-                  roles: ['ROLE_ADMIN']
+                  roles: ['ROLE_ADMIN'],
+                  active: true
                 },
                 {
                   title: 'Folhas de pagamento',
                   icon: 'mdi-call-made',
                   to: '/panel/financial/bill-to-pay/payroll',
-                  roles: ['ROLE_ADMIN']
+                  roles: ['ROLE_ADMIN'],
+                  active: true
                 },
                 {
                   title: 'Relatório',
                   icon: 'mdi-call-made',
                   to: '/panel/financial/bill-to-pay/report',
-                  roles: ['ROLE_ADMIN']
+                  roles: ['ROLE_ADMIN'],
+                  active: true
                 }
               ]
             },
@@ -214,17 +233,20 @@ export default Vue.extend({
               title: 'Contas a Receber',
               icon: 'mdi-call-received',
               roles: ['ROLE_ADMIN'],
+              active: true,
               items: [
                 {
                   title: 'Contas a Receber',
                   to: '/panel/financial/bill-to-receive',
-                  roles: ['ROLE_ADMIN']
+                  roles: ['ROLE_ADMIN'],
+                  active: true
                 },
                 {
-                  title: 'Relatório*',
+                  title: 'Relatório',
                   icon: 'mdi-call-made',
                   to: '/panel/financial/bill-to-receive/report',
-                  roles: ['ROLE_ADMIN']
+                  roles: ['ROLE_ADMIN'],
+                  active: true
                 }
               ]
             },
@@ -236,13 +258,15 @@ export default Vue.extend({
                 {
                   title: 'À receber X À pagar*',
                   to: '/panel/financial/analyzer/crossover',
-                  roles: ['ROLE_ADMIN']
+                  roles: ['ROLE_ADMIN'],
+                  active: false
                 },
                 {
                   title: 'Histórico*',
                   icon: 'mdi-call-made',
                   to: '/panel/financial/analyzer/history',
-                  roles: ['ROLE_ADMIN']
+                  roles: ['ROLE_ADMIN'],
+                  active: false
                 }
               ]
             }
@@ -252,13 +276,15 @@ export default Vue.extend({
           title: 'Matrícula',
           icon: 'mdi-account-details',
           to: '/panel/matriculation',
-          roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+          roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+          active: true
         },
         {
           title: 'Vendas',
           icon: 'mdi-store',
           to: '/panel/sale',
-          roles: ['ROLE_ADMIN', 'ROLE_BASIC']
+          roles: ['ROLE_ADMIN', 'ROLE_BASIC'],
+          active: true
         }
       ] as any
     }

@@ -4,10 +4,15 @@
         <v-form ref="formCondition" lazy-validation>
           <v-row>
             <v-col>
-              <v-text-field v-model="paymentCondition.code" :rules="[required]" label="Código"/>
+              <v-text-field label="Código" v-model="paymentCondition.code" :rules="[required]"/>
             </v-col>
             <v-col>
-              <v-text-field v-model="paymentCondition.description" :rules="[required]" label="Descrição"/>
+              <v-text-field label="Descrição" v-model="paymentCondition.description" :rules="[required]"/>
+            </v-col>
+            <v-col>
+              <v-select label="Forma padrão" v-model="paymentCondition.paymentMethodDefault" :items="paymentMethodList"
+              item-text="description" item-value="identitifer"
+              return-object/>
             </v-col>
           </v-row>
           <v-row>
@@ -57,8 +62,10 @@ export default Vue.extend({
         description: null,
         quantityInstallments: null,
         additionPercent: null,
-        status: null
-      }
+        status: null,
+        paymentMethodDefault: null as any
+      },
+      paymentMethodList: [] as any
     }
   },
   watch: {
@@ -115,16 +122,6 @@ export default Vue.extend({
         }
       }
     },
-    clear () {
-      this.paymentCondition = {
-        identifier: this.$route.params.identifier,
-        code: null,
-        description: null,
-        quantityInstallments: null,
-        additionPercent: null,
-        status: null
-      }
-    },
     async getPaymentCondition () {
       if (this.paymentCondition.identifier) {
         const search = {
@@ -144,12 +141,26 @@ export default Vue.extend({
         const response = await httpAPI.post('/payment-condition/search', search)
         this.paymentCondition = response.data.data.result[0]
       }
+    },
+    async getPaymentMethodList () {
+      const search = {
+        example: {}
+      } as HttpSearchRequest
+      const response = await httpAPI.post('/payment-method/search', search)
+      this.paymentMethodList = [
+        {
+          identifier: null,
+          description: 'Nenhum'
+        },
+        ...response.data.data.result
+      ]
     }
   },
-  created () {
+  async created () {
     if (this.paymentCondition.identifier) {
-      this.getPaymentCondition()
+      await this.getPaymentCondition()
     }
+    await this.getPaymentMethodList()
   }
 })
 </script>

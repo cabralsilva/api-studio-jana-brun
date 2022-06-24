@@ -1,6 +1,6 @@
 <template>
   <v-container id="dashboard" fluid tag="section">
-    <v-row class="mt-1">
+    <!-- <v-row class="mt-1">
       <v-col cols="12" sm="6" lg="4">
         <base-material-stats-card
           color="primary"
@@ -57,7 +57,7 @@
           </v-timeline>
         </base-material-stats-card>
       </v-col>
-    </v-row>
+    </v-row> -->
   </v-container>
 </template>
 
@@ -67,7 +67,24 @@ import BaseMaterialStatsCard from '@/components/dashboard/MaterialStatsCard.vue'
 
 export default Vue.extend({
   components: {
-    BaseMaterialStatsCard
+    // BaseMaterialStatsCard
   }
 })
 </script>
+
+<style scoped>
+#dashboard {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: url('@/assets/logo-light.jpg') ;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: .15;
+  width: 100%;
+  height: 100%;
+}
+</style>

@@ -20,7 +20,6 @@ export default Vue.extend({
 
   },
   created () {
-    console.log(this.$store.state.userDetails)
   }
 })
 </script>
