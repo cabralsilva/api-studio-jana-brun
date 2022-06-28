@@ -520,6 +520,7 @@ export default Vue.extend({
         } as HttpSearchRequest
         const response = await httpAPI.post('/employee/search', search)
         this.employee = response.data.data.result[0]
+        console.log(this.employee)
       }
     },
     async getCities () {
@@ -555,12 +556,12 @@ export default Vue.extend({
       this.countries = response.data.data.result
     }
   },
-  created () {
-    this.getCountries()
-    this.getStates()
-    this.getCities()
+  async created () {
+    await this.getCountries()
+    await this.getStates()
+    await this.getCities()
     if (this.employee.identifier) {
-      this.getEmployee()
+      await this.getEmployee()
     }
   }
 })

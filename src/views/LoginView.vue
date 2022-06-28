@@ -45,8 +45,8 @@ export default Vue.extend({
   data () {
     return {
       credentials: {
-        username: 'd.nadson@yahoo.com',
-        password: '123456'
+        username: '',
+        password: ''
       },
       alert: ''
     }

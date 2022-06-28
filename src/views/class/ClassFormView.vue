@@ -12,10 +12,10 @@
           </v-row>
           <v-row>
             <v-col>
-              <input-date label="Data de início" :callback="(date) => this.clazz.startDate = date" :initDate="this.clazz.startDate"/>
+              <input-date label="Data de início" startIn="DATE" :callback="(date) => this.clazz.startDate = date" :initDate="this.clazz.startDate"/>
             </v-col>
             <v-col>
-              <input-date label="Data de término" :callback="(date) => this.clazz.endDate = date" :initDate="this.clazz.endDate"/>
+              <input-date label="Data de término" startIn="DATE" :callback="(date) => this.clazz.endDate = date" :initDate="this.clazz.endDate"/>
             </v-col>
           </v-row>
           <v-row>
@@ -31,7 +31,7 @@
           </v-row>
           <v-row class="elevation-6 ma-0">
             <v-col>
-              <v-form ref="formSchedule" lazy-validation>
+              <v-form ref="formSchedule">
                 <v-row>
                   <v-col>
                     <app-label label="Dias e horários" />
@@ -72,7 +72,7 @@
                     <input-time
                       :required="required"
                       :callback="(time) => scheduleDetailClassEdit.endTime = time"
-                      :endTime="scheduleDetailClassEdit.endTime" label="Hora de término" />
+                      :initTime="scheduleDetailClassEdit.endTime" label="Hora de término" />
                   </v-col>
                   <v-col>
                     <v-select
@@ -83,7 +83,7 @@
                       @change="selectClassroom(scheduleDetailClassEdit.classroom)"/>
                   </v-col>
                   <v-col align="right">
-                    <v-btn align="right" :disabled="false" color="primary" @click="addScheduleDetailClass(scheduleDetailClassEdit)"> Add </v-btn>
+                    <v-btn align="right" :disabled="false" color="primary" @click="addScheduleDetailClass"> Add </v-btn>
                   </v-col>
                 </v-row>
               </v-form>
@@ -118,7 +118,7 @@
                         {{ oftenEnum[scheduleDetailClass.often] }}<br/>
                       </td>
                       <td>
-                        {{ isOftenDayDate(scheduleDetailClass.often) ? getDateFormat(scheduleDetailClass.oftenDay) : scheduleDetailClass.oftenDay  }}
+                        {{ getOftenValue(scheduleDetailClass) }}
                       </td>
                       <td>
                         {{ `De ${scheduleDetailClass.initTime} às ${scheduleDetailClass.endTime}` }}
@@ -223,7 +223,7 @@ import httpAPI from '@/plugins/axios'
 import { HttpSearchRequest } from '@/model/HttpUtils'
 import { TypeOfSalaryList, TypeOfSalaryEnum } from '@/model/TypeOfSalaryEnum'
 import { OftenList, OftenEnum, OftenType } from '@/model/OftenEnum'
-import { DayOfWeekList, DayOfWeekEnum } from '@/model/DayOfWeekEnum'
+import { DayOfWeekList, DayOfWeekEnum, DayOfWeekEntries } from '@/model/DayOfWeekEnum'
 import AppLabel from '@/components/AppLabel.vue'
 import moment from 'moment'
 
@@ -237,6 +237,7 @@ export default Vue.extend({
     return {
       typeOfPaymentList: TypeOfSalaryList,
       dayOfWeekList: DayOfWeekList,
+      dayOfWeekEnum: DayOfWeekEnum,
       oftenList: OftenList,
       oftenEnum: OftenEnum,
       formValid: false,
@@ -282,6 +283,17 @@ export default Vue.extend({
   watch: {
   },
   methods: {
+    getOftenValue (scheduleDetailClass: any) {
+      if (this.isOftenDayDate(scheduleDetailClass.often)) {
+        return this.getDateFormat(scheduleDetailClass.oftenDay)
+      }
+
+      if (scheduleDetailClass.often === Object.keys(OftenEnum)[Object.values(OftenEnum).indexOf(OftenEnum.WEEKLY as unknown as OftenEnum)]) {
+        return (this.dayOfWeekEnum as any)[scheduleDetailClass.oftenDay]
+      }
+
+      return scheduleDetailClass.oftenDay
+    },
     getDateFormat (value: any, format = 'DD/MM/YYYY') {
       return moment(value).format(format) as any
     },
@@ -382,11 +394,20 @@ export default Vue.extend({
         paymentValue: null as any
       }
     },
-    addScheduleDetailClass (scheduleDetailClass: any) {
+    addScheduleDetailClass () {
       if (!(this.$refs.formSchedule as Vue & { validate: () => boolean }).validate()) {
         return
       }
-      this.clazz.scheduleDetailClassList.push(scheduleDetailClass)
+      this.clazz.scheduleDetailClassList.push(this.scheduleDetailClassEdit)
+
+      this.scheduleDetailClassEdit = {
+        identifier: null as any,
+        often: null as any,
+        oftenDay: null as any,
+        initTime: null as any,
+        endTime: null as any,
+        classroom: null as any
+      }
     },
     removeRole (index: any) {
       this.clazz.rolePaymentList.splice(index, 1)

@@ -316,6 +316,7 @@ export default Vue.extend({
     isAuthorized (roles: Array<string>) {
       const jsonUserDetails = localStorage.getItem(lsUserDetailsKey) as string
       const userDetails = JSON.parse(jsonUserDetails)
+      console.log(userDetails)
       if (roles) {
         const authorities = userDetails.authorities
         return authorities.map((i: any) => i.authority).some((r: any) => roles.includes(r))
