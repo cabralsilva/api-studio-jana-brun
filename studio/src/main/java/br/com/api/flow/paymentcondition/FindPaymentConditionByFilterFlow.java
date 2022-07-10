@@ -27,22 +27,16 @@ public class FindPaymentConditionByFilterFlow {
 
 	public ResponseAPI<PaymentConditionFilter> execute(PaymentConditionFilter filter, HttpHeaders headers) {
 
-		ResponseAPI<PaymentConditionFilter> response = ResponseAPI.<PaymentConditionFilter>builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<PaymentConditionFilter> response = ResponseAPI.<PaymentConditionFilter>builder()
+				.friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			response.setData(findPaymentConditionByFilterFlowItem.findByFilter(filter));
 			response.setStatus(StatusResponse.SUCCESS);
-		} catch (FindByFilterException e) {
-			response.setStatus(StatusResponse.ERROR);
-			response.getFriendlyMessagesList().add(messageSource.getMessage(e.getMessage(), null,
-					Utils.getLocale(headers.getAcceptLanguageAsLocales())));
-
-			response.setReportTech(ReportTech
-					.builder().level(LevelReport.FAILURE).code(e.getCode()).message(messageSource
-							.getMessage(e.getMessage(), null, Utils.getLocale(headers.getAcceptLanguageAsLocales())))
-					.exception(e).build());
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.getFriendlyMessagesList().add(messageSource.getMessage(e.getMessage(), null,
+					Utils.getLocale(headers.getAcceptLanguageAsLocales())));
 			response.setStatus(StatusResponse.ERROR);
 
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())

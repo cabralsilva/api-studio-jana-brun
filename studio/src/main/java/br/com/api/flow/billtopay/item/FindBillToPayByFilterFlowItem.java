@@ -1,52 +1,40 @@
 package br.com.api.flow.billtopay.item;
 
-import static br.com.api.exceptions.FindByFilterExceptionEnum.MORE_THAN_ONE_matriculation_FOUND;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import br.com.api.converter.BillToPayMapper;
 import br.com.api.entity.BillToPay;
 import br.com.api.entity.repository.BillToPayFilter;
-import br.com.api.entity.repository.BillToPayRepositoryImpl;
-import br.com.api.exceptions.FindByFilterException;
+import br.com.api.entity.repository.BillToPayRepository;
+import lombok.var;
 
 @Component
 public class FindBillToPayByFilterFlowItem {
 
 	@Autowired
-	private BillToPayRepositoryImpl billToPayRepositoryImpl;
+	private BillToPayRepository billToPayRepository;
 
 	@Autowired
 	private BillToPayMapper billToPayMapper;
 
-	public BillToPayFilter findByFilter(BillToPayFilter filter)
-			throws FindByFilterException, NoSuchMethodException, SecurityException, IllegalArgumentException,
-			IllegalAccessException, InvocationTargetException, InstantiationException {
+	public BillToPayFilter findByFilter(BillToPayFilter filter) {
 
+		Example<BillToPay> example = Example.of(billToPayMapper.toEntity(filter.getExample()));
 		if (Boolean.TRUE.equals(filter.getPageable())) {
-			Page<BillToPay> entities = billToPayRepositoryImpl.findByFilter(filter,
+			final var ret = billToPayRepository.findAll(example,
 					PageRequest.of(filter.getCurrentPage(), filter.getSizePage()));
-
-			filter.setResult(entities.map(entity -> billToPayMapper.toDTO(entity)).toList());
-			filter.setTotal(Math.toIntExact(entities.getTotalElements()));
-			filter.setTotalPages(Math.toIntExact(entities.getTotalPages()));
-			filter.setLast(entities.isLast());
-		} else {
-			List<BillToPay> entities = billToPayRepositoryImpl.findByFilter(filter);
-			filter.setResult(entities.stream().map(entity -> billToPayMapper.toDTO(entity)).collect(Collectors.toList()));			
+			filter.setResult(ret.stream().map(p -> billToPayMapper.toDTO(p)).collect(Collectors.toList()));
+			filter.setTotal((int) ret.getTotalElements());
+			filter.setTotalPages(ret.getTotalPages());
+			return filter;
 		}
-
-		if (Boolean.TRUE.equals(filter.getResultUnique()) && filter.getResult().size() > 1) {
-			throw new FindByFilterException(MORE_THAN_ONE_matriculation_FOUND);
-		}
-
+		final var ret = billToPayRepository.findAll(example);
+		filter.setResult(ret.stream().map(p -> billToPayMapper.toDTO(p)).collect(Collectors.toList()));
 		return filter;
 	}
 }

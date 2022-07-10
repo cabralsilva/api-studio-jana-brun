@@ -15,6 +15,8 @@ public class CheckAddressFlowItem {
 
 	@Autowired
 	private FindAddressByFilterFlowItem findAddressByFilterFlowItem;
+	@Autowired
+	private InsertAddressFlowItem insertAddressFlowItem;
 
 	public AddressDTO checkIfExist(AddressDTO addressDTO)
 			throws NoSuchMethodException, SecurityException, IllegalArgumentException, IllegalAccessException,
@@ -28,6 +30,8 @@ public class CheckAddressFlowItem {
 
 		if (existing.isPresent()) {
 			addressDTO.setIdentifier(existing.get().getIdentifier());
+		} else {
+			addressDTO.setIdentifier(insertAddressFlowItem.insert(addressDTO).getIdentifier());
 		}
 		return addressDTO;
 	}

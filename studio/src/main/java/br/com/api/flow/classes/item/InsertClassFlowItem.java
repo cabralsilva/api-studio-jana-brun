@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.api.converter.ClassMapper;
 import br.com.api.dto.ClassDTO;
+import br.com.api.dto.ScheduleDetailClassDTO;
 import br.com.api.entity.repository.ClassRepository;
 import lombok.NonNull;
 
@@ -18,6 +19,9 @@ public class InsertClassFlowItem {
 
 	@Autowired
 	private UpdateClassFlowItem updateClassFlowItem;
+	
+	@Autowired
+	private InsertScheduleDetailClassFlowItem insertScheduleDetailClassFlowItem;
 
 	@Autowired
 	private ClassMapper classMapper;
@@ -28,6 +32,14 @@ public class InsertClassFlowItem {
 			return updateClassFlowItem.update(clazz);
 		}
 
-		return classMapper.toDTO(classRepository.save(classMapper.toEntity(clazz)));
+//		return classMapper.toDTO(classRepository.save(classMapper.toEntity(clazz)));
+		final ClassDTO classDTOAux = classMapper.toDTO(classRepository.save(classMapper.toEntity(clazz)));
+		
+		for (ScheduleDetailClassDTO scheduleDetailClassDTO : clazz.getScheduleDetailClassList()) {
+			scheduleDetailClassDTO.setClazz(ClassDTO.builder().identifier(classDTOAux.getIdentifier()).build());
+			scheduleDetailClassDTO = insertScheduleDetailClassFlowItem.insert(scheduleDetailClassDTO);
+		}
+		
+		return classDTOAux;
 	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.api.enums.LevelReport;
@@ -18,10 +20,10 @@ public class DeleteBillToReceiveInstallmentByIdentifierFlow {
 	@Autowired
 	private DeleteBillToReceiveInstallmentFlowItem deleteBillToReceiveInstallmentFlowItem;
 
-	public ResponseAPI execute(Integer identifier , HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<Void>> execute(Integer identifier , HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
-
+		ResponseAPI<Void> response = ResponseAPI.<Void>builder()
+				.friendlyMessagesList(new ArrayList<>()).build();
 		try {
 			deleteBillToReceiveInstallmentFlowItem.delete(identifier);
 			response.setStatus(StatusResponse.SUCCESS);
@@ -29,8 +31,9 @@ public class DeleteBillToReceiveInstallmentByIdentifierFlow {
 			response.setStatus(StatusResponse.ERROR);
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())
 					.message(e.getLocalizedMessage()).exception(e).build());
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
 		}
 
-		return response;
+		return ResponseEntity.ok(response);
 	}
 }

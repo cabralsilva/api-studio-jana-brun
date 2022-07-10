@@ -35,7 +35,7 @@ public class Person {
 	@Column(name = "person_nickname")
 	private String nickName;
 
-	@Column(name = "person_document_number_1", nullable = false, unique = true)
+	@Column(name = "person_document_number_1", nullable = false)
 	private String documentNumber1;
 
 	@Column(name = "person_document_number_2")

@@ -1,5 +1,7 @@
 package br.com.api.entity.repository;
 
+import java.util.Calendar;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -17,5 +19,7 @@ import lombok.experimental.SuperBuilder;
 public class ClassFilter extends AbstractFilter<ClassDTO> {
 
 	private static final long serialVersionUID = 1972999281351295270L;
+	
+	private Calendar greaterThanEndDate;
 
 }

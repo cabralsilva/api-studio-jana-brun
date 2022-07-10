@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.api.dto.CityDTO;
@@ -19,7 +21,7 @@ public class UpdateCityFlow {
 	@Autowired
 	private UpdateCityFlowItem updateCityFlowItem;
 
-	public ResponseAPI<CityDTO> execute(CityDTO cityDTO, HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<CityDTO>> execute(CityDTO cityDTO, HttpHeaders headers) {
 
 		ResponseAPI<CityDTO> response = ResponseAPI.<CityDTO>builder().friendlyMessagesList(new ArrayList<>()).build();
 
@@ -31,8 +33,9 @@ public class UpdateCityFlow {
 
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())
 					.message(e.getLocalizedMessage()).exception(e).build());
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
 		}
 
-		return response;
+		return ResponseEntity.ok(response);
 	}
 }

@@ -1,7 +1,9 @@
 package br.com.api.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,8 +18,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
 
-import br.com.api.enums.StatusOfBillEnum;
 import br.com.api.enums.BillToReceiveTypeEnum;
+import br.com.api.enums.StatusOfBillEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,8 +43,8 @@ public class BillToReceive {
 	private PaymentCondition paymentCondition;
 
 	@ManyToOne
-	@JoinColumn(name = "responsible_id", nullable = false)
-	private Person responsible;
+	@JoinColumn(name = "customer_id")
+	private Person customer;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "bill_to_receive_type", nullable = false)
@@ -56,10 +58,17 @@ public class BillToReceive {
 	@Column(name = "bill_to_receive_creation_date_time", nullable = false, updatable = false)
 	private LocalDateTime creationDateTime;
 
-	@Column(name = "bill_to_receive_emission_date_time", nullable = false)
-	private LocalDateTime emissionDateTime;
+	@Column(name = "bill_to_receive_emission_date", nullable = false)
+	private LocalDate emissionDate;
 
 	@Column(name = "bill_to_receive_value", nullable = false)
 	private Double value;
+	
+	@ManyToOne
+	@JoinColumn(name="matriculation_id")
+	private Matriculation matriculation;
 
+	@ManyToOne
+	@JoinColumn(name="order_id")
+	private Order order;
 }

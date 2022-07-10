@@ -7,10 +7,12 @@ import lombok.Getter;
 @Getter
 public enum BillToReceiveTypeEnum {
 
+	SINGLE("label.single"),
+	LESSON_DEMO("label.lesson.single"),	
 	LESSON_SINGLE("label.lesson.single"),
-	matriculation("label.matriculation"),
+	MATRICULATION("label.matriculation"),
 	PRESENTATION("label.presentation"),
-	STORE("label.store");
+	SALE("label.sale");
 
 	private final String i18n;
 }

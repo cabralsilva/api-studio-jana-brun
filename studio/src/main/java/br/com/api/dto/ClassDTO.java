@@ -1,13 +1,12 @@
 package br.com.api.dto;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import br.com.api.entity.Employee;
-import br.com.api.entity.Product;
 import br.com.api.entity.Student;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,10 +24,11 @@ public class ClassDTO {
 	private String code;
 	private String description;
 	private String inviteWhatsAppGroup;
-	private Set<Employee> teacherList;
-	private Set<Product> productList;
+	private List<ScheduleDetailClassDTO> scheduleDetailClassList;
+	private List<RolePaymentDTO> rolePaymentList;
 	private Set<Student> studentList;
 	private Calendar creationDate;
 	private Calendar startDate;
 	private Calendar endDate;
+	private ProductDTO product;
 }

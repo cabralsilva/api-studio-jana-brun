@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import br.com.api.enums.StatusActiveEnum;
+import br.com.api.enums.TypeOfCurrencyEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,4 +23,6 @@ public class PaymentConditionDTO {
 	private Integer quantityInstallments;
 	private Double additionPercent;
 	private StatusActiveEnum status;
+	private TypeOfCurrencyEnum currencyType;
+	private PaymentMethodDTO paymentMethodDefault;
 }

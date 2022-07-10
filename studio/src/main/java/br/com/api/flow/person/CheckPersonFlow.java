@@ -21,7 +21,7 @@ public class CheckPersonFlow {
 	public PersonDTO execute(PersonDTO individualDTO) throws Exception {
 
 		try {
-			checkIndividual(individualDTO);
+			// checkIndividual(individualDTO);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e);

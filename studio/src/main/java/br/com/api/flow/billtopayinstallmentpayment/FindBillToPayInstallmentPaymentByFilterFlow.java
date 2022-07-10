@@ -11,7 +11,7 @@ import br.com.api.entity.repository.BillToPayInstallmentPaymentFilter;
 import br.com.api.enums.LevelReport;
 import br.com.api.enums.StatusResponse;
 import br.com.api.exceptions.FindByFilterException;
-import br.com.api.flow.billtopayinstallmentpayment.item.FindBillToPayInstallmentPaymentByFilterFlowItem;
+import br.com.api.flow.billtopayinstallmentpayment.item.SearchBillToPayInstallmentPaymentByFilterFlowItem;
 import br.com.api.utils.ReportTech;
 import br.com.api.utils.ResponseAPI;
 import br.com.api.utils.Utils;
@@ -20,7 +20,7 @@ import br.com.api.utils.Utils;
 public class FindBillToPayInstallmentPaymentByFilterFlow {
 
 	@Autowired
-	private FindBillToPayInstallmentPaymentByFilterFlowItem findBillToPayInstallmentPaymentByFilterFlowItem;
+	private SearchBillToPayInstallmentPaymentByFilterFlowItem findBillToPayInstallmentPaymentByFilterFlowItem;
 
 	@Autowired
 	private MessageSource messageSource;
@@ -30,7 +30,7 @@ public class FindBillToPayInstallmentPaymentByFilterFlow {
 		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
-			response.setData(findBillToPayInstallmentPaymentByFilterFlowItem.findByFilter(filter));
+			response.setData(findBillToPayInstallmentPaymentByFilterFlowItem.search(filter));
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (FindByFilterException e) {
 			response.setStatus(StatusResponse.ERROR);

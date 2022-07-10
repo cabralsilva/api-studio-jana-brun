@@ -11,4 +11,3 @@ import br.com.api.entity.Person;
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 	
 }
-

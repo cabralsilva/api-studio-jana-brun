@@ -1,8 +1,10 @@
 package br.com.api.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,12 +12,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.api.enums.EmployeeStatusEnum;
 import br.com.api.enums.JobEnum;
-import br.com.api.enums.TypeOfSalaryEnum;
+import br.com.api.enums.RoleEnum;
+import br.com.api.enums.TypeOfPaymentEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -67,7 +71,7 @@ public class Employee {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "employee_type_of_salary", nullable = false)
-	private TypeOfSalaryEnum typeOfSalary;
+	private TypeOfPaymentEnum typeOfSalary;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "employee_status", nullable = false)
@@ -87,4 +91,10 @@ public class Employee {
 
 	@Column(name = "employee_demission_date")
 	private LocalDate demissionDate;
+	
+	@ElementCollection(targetClass = RoleEnum.class)
+	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "employee_id"))
+	@Column(name = "role_id")
+	@Enumerated(EnumType.STRING)
+	private List<RoleEnum> roleList;
 }

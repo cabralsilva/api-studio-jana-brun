@@ -1,5 +1,6 @@
 package br.com.api.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 
 import br.com.api.enums.InstallmentStatusEnum;
 import lombok.Getter;
@@ -49,8 +51,14 @@ public class BillToReceiveInstallment {
 	private LocalDateTime creationDateTime;
 
 	@Column(name = "bill_to_receive_installment_target_date", nullable = false)
-	private LocalDateTime targetDate;
+	private LocalDate targetDate;
 
-	@Column(name = "bill_to_receive_installment_value", nullable = false)
+	@Column(name = "bill_to_receive_installment_original_value")
+	private Double originalValue;
+
+	@Column(name = "bill_to_receive_installment_value")
 	private Double value;
+
+	@Column(name = "bill_to_receive_installment_addition_value", columnDefinition = "float default 0.0")
+	private Double additionValue;
 }

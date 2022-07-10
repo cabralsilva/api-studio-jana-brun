@@ -1,8 +1,10 @@
 package br.com.api.entity;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,16 +44,14 @@ public class Class {
 	
 	@Column(name = "class_invite_whatsapp_group")
 	private String inviteWhatsAppGroup;
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "class_teacher", joinColumns = { @JoinColumn(name = "class_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "teacher_id") })
-	private Set<Employee> teacherList;
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "class_product", joinColumns = { @JoinColumn(name = "class_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "product_id") })
-	private Set<Product> productList;
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "class_id", nullable = false)
+	private List<RolePayment> rolePaymentList;
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="class_id")
+	private List<ScheduleDetailClass> scheduleDetailClassList;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "class_student", joinColumns = { @JoinColumn(name = "class_id") }, inverseJoinColumns = {
@@ -68,5 +70,9 @@ public class Class {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "class_end_date")
 	private Calendar endDate;
+	
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	private Product product;
 
 }

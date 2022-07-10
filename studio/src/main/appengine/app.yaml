@@ -14,11 +14,16 @@
 # [START gae_flex_quickstart_yaml]
 runtime: java
 env: flex
+manual_scaling:
+  instances: 1
 
 env_variables:
  spring_profiles_active: "hmg"
 
+resources:
+  memory_gb: 4
+
 handlers:
-- url: /.*
+- url: /api/.*
   script: this field is required, but ignored
 # [END gae_flex_quickstart_yaml]

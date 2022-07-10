@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import br.com.api.converter.BillToPayMapper;
 import br.com.api.dto.BillToPayDTO;
 import br.com.api.entity.repository.BillToPayRepository;
+import br.com.api.flow.billtopayinstallment.item.CreateBillToPayInstallmentFlowItem;
 
 @Component
 public class InsertBillToPayFlowItem {
@@ -22,12 +23,18 @@ public class InsertBillToPayFlowItem {
 	@Autowired
 	private BillToPayMapper billToPayMapper;
 
+	@Autowired
+	private CreateBillToPayInstallmentFlowItem createInstallmentFlowItem;
+
 	public BillToPayDTO insert(@NonNull BillToPayDTO billToPay) {
 
 		if (Objects.nonNull(billToPay.getIdentifier())) {
 			return updateBillToPayFlowItem.update(billToPay);
 		}
 
-		return billToPayMapper.toDTO(billToPayRepository.save(billToPayMapper.toEntity(billToPay)));
+		BillToPayDTO billToPayDTO = billToPayMapper
+				.toDTO(billToPayRepository.save(billToPayMapper.toEntity(billToPay)));
+		createInstallmentFlowItem.create(billToPayDTO);
+		return billToPayDTO;
 	}
 }

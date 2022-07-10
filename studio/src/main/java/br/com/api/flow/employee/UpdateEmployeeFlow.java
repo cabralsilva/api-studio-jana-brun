@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.api.dto.EmployeeDTO;
 import br.com.api.dto.PersonDTO;
@@ -24,10 +26,10 @@ public class UpdateEmployeeFlow {
 	@Autowired
 	private UpdatePersonFlow updatePersonFlow;
 
-	@Transactional	
-	public ResponseAPI<EmployeeDTO> execute(EmployeeDTO employeeDTO, HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<EmployeeDTO>> execute(EmployeeDTO employeeDTO, HttpHeaders headers) {
 
-		ResponseAPI<EmployeeDTO> response = ResponseAPI.<EmployeeDTO>builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<EmployeeDTO> response = ResponseAPI.<EmployeeDTO>builder().friendlyMessagesList(new ArrayList<>())
+				.build();
 
 		try {
 			employeeDTO.setPerson(PersonDTO.builder()
@@ -40,8 +42,8 @@ public class UpdateEmployeeFlow {
 
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())
 					.message(e.getLocalizedMessage()).exception(e).build());
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
 		}
-
-		return response;
+		return ResponseEntity.ok(response);
 	}
 }

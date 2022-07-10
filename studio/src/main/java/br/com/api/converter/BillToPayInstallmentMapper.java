@@ -11,4 +11,5 @@ public interface BillToPayInstallmentMapper {
 	public BillToPayInstallment toEntity(BillToPayInstallmentDTO dto);
 
 	public BillToPayInstallmentDTO toDTO(BillToPayInstallment entity);
+
 }

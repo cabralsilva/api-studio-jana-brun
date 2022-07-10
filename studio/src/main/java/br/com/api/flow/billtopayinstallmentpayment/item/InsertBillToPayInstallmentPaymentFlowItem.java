@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import br.com.api.converter.BillToPayInstallmentPaymentMapper;
 import br.com.api.dto.BillToPayInstallmentPaymentDTO;
 import br.com.api.entity.repository.BillToPayInstallmentPaymentRepository;
+import br.com.api.flow.billtopayinstallment.item.UpdateStatusBillToPayInstallmentFlowItem;
 
 @Component
 public class InsertBillToPayInstallmentPaymentFlowItem {

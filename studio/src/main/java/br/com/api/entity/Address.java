@@ -36,7 +36,7 @@ public class Address {
 	@Column(name = "address_zipcode")
 	private String zipCode;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "neighborhood_id", nullable = false)
 	private Neighborhood neighborhood;
 

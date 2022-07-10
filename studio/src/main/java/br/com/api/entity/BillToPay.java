@@ -1,5 +1,6 @@
 package br.com.api.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -40,8 +41,8 @@ public class BillToPay {
 	private PaymentCondition paymentCondition;
 
 	@ManyToOne
-	@JoinColumn(name = "supplier_id", nullable = false)
-	private Supplier supplier;
+	@JoinColumn(name = "person_id")
+	private Person person;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "bill_to_pay_status", nullable = false)
@@ -51,10 +52,13 @@ public class BillToPay {
 	@Column(name = "bill_to_pay_creation_date_time", nullable = false, updatable = false)
 	private LocalDateTime creationDateTime;
 
-	@Column(name = "bill_to_pay_emission_date_time", nullable = false)
-	private LocalDateTime emissionDateTime;
+	@Column(name = "bill_to_pay_emission_date", nullable = false)
+	private LocalDate emissionDate;
 
 	@Column(name = "bill_to_pay_value", nullable = false)
 	private Double value;
+
+	@Column(name = "bill_to_pay_observation")
+	private String observation;
 
 }

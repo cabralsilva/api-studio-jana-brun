@@ -2,7 +2,6 @@ package br.com.api.entity;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import br.com.api.enums.ProductCategoryEnum;
 import br.com.api.enums.StatusActiveEnum;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,5 +48,9 @@ public class Product {
 		joinColumns = { @JoinColumn(name = "product_id") }, 
 		inverseJoinColumns = { @JoinColumn(name = "grate_id") })
 	private List<Grate> grateList;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "product_category")
+	private ProductCategoryEnum category;
 
 }

@@ -1,27 +1,25 @@
 package br.com.api.flow.city.item;
 
-import static br.com.api.exceptions.FindByFilterExceptionEnum.MORE_THAN_ONE_matriculation_FOUND;
-
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import br.com.api.converter.CityMapper;
 import br.com.api.entity.City;
 import br.com.api.entity.repository.CityFilter;
-import br.com.api.entity.repository.CityRepositoryImpl;
+import br.com.api.entity.repository.CityRepository;
 import br.com.api.exceptions.FindByFilterException;
+import lombok.var;
 
 @Component
 public class FindCityByFilterFlowItem {
 
 	@Autowired
-	private CityRepositoryImpl cityRepositoryImpl;
+	private CityRepository cityRepository;
 
 	@Autowired
 	private CityMapper cityMapper;
@@ -30,23 +28,17 @@ public class FindCityByFilterFlowItem {
 			throws FindByFilterException, NoSuchMethodException, SecurityException, IllegalArgumentException,
 			IllegalAccessException, InvocationTargetException, InstantiationException {
 
+		Example<City> example = Example.of(cityMapper.toEntity(filter.getExample()));
 		if (Boolean.TRUE.equals(filter.getPageable())) {
-			Page<City> entities = cityRepositoryImpl.findByFilter(filter,
+			final var ret = cityRepository.findAll(example,
 					PageRequest.of(filter.getCurrentPage(), filter.getSizePage()));
-
-			filter.setResult(entities.map(entity -> cityMapper.toDTO(entity)).toList());
-			filter.setTotal(Math.toIntExact(entities.getTotalElements()));
-			filter.setTotalPages(Math.toIntExact(entities.getTotalPages()));
-			filter.setLast(entities.isLast());
-		} else {
-			List<City> entities = cityRepositoryImpl.findByFilter(filter);
-			filter.setResult(entities.stream().map(entity -> cityMapper.toDTO(entity)).collect(Collectors.toList()));
+			filter.setResult(ret.stream().map(p -> cityMapper.toDTO(p)).collect(Collectors.toList()));
+			filter.setTotal((int) ret.getTotalElements());
+			filter.setTotalPages(ret.getTotalPages());
+			return filter;
 		}
-
-		if (Boolean.TRUE.equals(filter.getResultUnique()) && filter.getResult().size() > 1) {
-			throw new FindByFilterException(MORE_THAN_ONE_matriculation_FOUND);
-		}
-
+		final var ret = cityRepository.findAll(example);
+		filter.setResult(ret.stream().map(p -> cityMapper.toDTO(p)).collect(Collectors.toList()));
 		return filter;
 	}
 }

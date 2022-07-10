@@ -9,25 +9,29 @@ import org.springframework.stereotype.Component;
 import br.com.api.converter.MatriculationMapper;
 import br.com.api.dto.MatriculationDTO;
 import br.com.api.entity.repository.MatriculationRepository;
+import br.com.api.flow.billtoreceiveinstallment.item.CreateBillToReceiveInstallmentFlowItem;
 
 @Component
 public class InsertMatriculationFlowItem {
 
 	@Autowired
-	private MatriculationRepository MatriculationRepository;
+	private MatriculationRepository matriculationRepository;
 
 	@Autowired
 	private UpdateMatriculationFlowItem updateMatriculationFlowItem;
 
 	@Autowired
-	private MatriculationMapper MatriculationMapper;
+	private MatriculationMapper matriculationMapper;
+	
+	@Autowired
+	private CreateBillToReceiveInstallmentFlowItem createBillToReceiveInstallmentFlowItem;
 
-	public MatriculationDTO insert(@NonNull MatriculationDTO Matriculation) {
+	public MatriculationDTO insert(@NonNull MatriculationDTO matriculationDTO) {
 
-		if (Objects.nonNull(Matriculation.getIdentifier())) {
-			return updateMatriculationFlowItem.update(Matriculation);
+		if (Objects.nonNull(matriculationDTO.getIdentifier())) {
+			return updateMatriculationFlowItem.update(matriculationDTO);
 		}
 
-		return MatriculationMapper.toDTO(MatriculationRepository.save(MatriculationMapper.toEntity(Matriculation)));
+		return matriculationMapper.toDTO(matriculationRepository.save(matriculationMapper.toEntity(matriculationDTO)));
 	}
 }

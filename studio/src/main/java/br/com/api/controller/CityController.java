@@ -36,27 +36,27 @@ public class CityController {
 	private DeleteCityByIdentifierFlow deleteCityByIdentifierFlow;
 
 	@PostMapping
-	public ResponseEntity<ResponseAPI> insert(@RequestBody CityDTO cityDTO, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<CityDTO>> insert(@RequestBody CityDTO cityDTO, @RequestHeader HttpHeaders headers) {
 
-		return ResponseEntity.ok(insertCityFlow.execute(cityDTO, headers));
+		return insertCityFlow.execute(cityDTO, headers);
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseAPI> update(@RequestBody CityDTO cityDTO, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<CityDTO>> update(@RequestBody CityDTO cityDTO, @RequestHeader HttpHeaders headers) {
 
-		return ResponseEntity.ok(updateCityFlow.execute(cityDTO, headers));
+		return updateCityFlow.execute(cityDTO, headers);
 	}
 
 	@PostMapping("/search")
 	public ResponseEntity<ResponseAPI<CityFilter>> find(@RequestBody CityFilter filter, @RequestHeader HttpHeaders headers) {
 
-		return ResponseEntity.ok(findCityByFilterFlow.execute(filter, headers));
+		return findCityByFilterFlow.execute(filter, headers);
 	}
 	
 	@DeleteMapping("/{identifier}")
-	public ResponseEntity<ResponseAPI> delete(@PathVariable Integer identifier, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<Void>> delete(@PathVariable Integer identifier, @RequestHeader HttpHeaders headers) {
 
-		return ResponseEntity.ok(deleteCityByIdentifierFlow.execute(identifier, headers));
+		return deleteCityByIdentifierFlow.execute(identifier, headers);
 	}
 
 }

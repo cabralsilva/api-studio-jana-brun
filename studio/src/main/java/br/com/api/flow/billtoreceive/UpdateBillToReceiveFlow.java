@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.api.dto.BillToReceiveDTO;
@@ -19,9 +21,9 @@ public class UpdateBillToReceiveFlow {
 	@Autowired
 	private UpdateBillToReceiveFlowItem updateBillToReceiveFlowItem;
 
-	public ResponseAPI execute(BillToReceiveDTO billToReceiveDTO, HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<BillToReceiveDTO>> execute(BillToReceiveDTO billToReceiveDTO, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<BillToReceiveDTO> response = ResponseAPI.<BillToReceiveDTO>builder().friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			response.setData(updateBillToReceiveFlowItem.update(billToReceiveDTO));
@@ -31,8 +33,9 @@ public class UpdateBillToReceiveFlow {
 
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())
 					.message(e.getLocalizedMessage()).exception(e).build());
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
 		}
 
-		return response;
+		return ResponseEntity.ok(response);
 	}
 }

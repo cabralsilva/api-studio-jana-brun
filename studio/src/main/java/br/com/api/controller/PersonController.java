@@ -3,6 +3,7 @@ package br.com.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import br.com.api.utils.ResponseAPI;
 
 @RestController
 @RequestMapping(path = "/person")
+@CrossOrigin
 public class PersonController {
 
 	@Autowired
@@ -34,23 +36,26 @@ public class PersonController {
 	private DeletePersonByIdentifierFlow deletePersonByIdentifierFlow;
 
 	@PostMapping
-	public ResponseEntity<ResponseAPI<PersonDTO>> insert(@RequestBody PersonDTO personDTO, @RequestHeader HttpHeaders headers) throws Exception {
+	public ResponseEntity<ResponseAPI<PersonDTO>> insert(@RequestBody PersonDTO personDTO,
+			@RequestHeader HttpHeaders headers) throws Exception {
 
 		return ResponseEntity.ok(insertPersonFlow.execute(personDTO, headers));
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseAPI<PersonDTO>> update(@RequestBody PersonDTO personDTO, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<PersonDTO>> update(@RequestBody PersonDTO personDTO,
+			@RequestHeader HttpHeaders headers) {
 
 		return ResponseEntity.ok(updatePersonFlow.execute(personDTO, headers));
 	}
 
 	@PostMapping("/search")
-	public ResponseEntity<ResponseAPI> find(@RequestBody PersonFilter filter, @RequestHeader HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<PersonFilter>> find(@RequestBody PersonFilter filter,
+			@RequestHeader HttpHeaders headers) {
 
-		return ResponseEntity.ok(findPersonByFilterFlow.execute(filter, headers));
+		return findPersonByFilterFlow.execute(filter, headers);
 	}
-	
+
 	@DeleteMapping("/{identifier}")
 	public ResponseEntity<ResponseAPI> delete(@PathVariable Integer identifier, @RequestHeader HttpHeaders headers) {
 

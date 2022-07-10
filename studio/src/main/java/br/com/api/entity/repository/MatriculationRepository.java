@@ -1,5 +1,7 @@
 package br.com.api.entity.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,9 +14,12 @@ import br.com.api.enums.MatriculationStatusEnum;
 @Repository
 @Transactional
 public interface MatriculationRepository extends JpaRepository<Matriculation, Integer> {
-	
+
 	@Modifying
 	@Query("UPDATE Matriculation SET status = :status WHERE identifier = :identifier")
 	public void updateStatusByIdentifier(MatriculationStatusEnum status, Integer identifier);
-}
 
+	public List<Matriculation> findByClassList(br.com.api.entity.Class clazz);
+
+	public Long countByClassList(br.com.api.entity.Class clazz);
+}

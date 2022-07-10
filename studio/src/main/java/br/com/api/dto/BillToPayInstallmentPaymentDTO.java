@@ -1,5 +1,6 @@
 package br.com.api.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,6 +25,6 @@ public class BillToPayInstallmentPaymentDTO {
 	private PaymentMethodDTO method;
 	private PaymentStatusEnum status;
 	private LocalDateTime creationDateTime;
-	private LocalDateTime paymentDate;
+	private LocalDate paymentDate;
 	private Double value;
 }

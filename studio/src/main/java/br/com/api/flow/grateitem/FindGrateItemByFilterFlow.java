@@ -10,11 +10,9 @@ import org.springframework.stereotype.Service;
 import br.com.api.entity.repository.GrateItemFilter;
 import br.com.api.enums.LevelReport;
 import br.com.api.enums.StatusResponse;
-import br.com.api.exceptions.FindByFilterException;
 import br.com.api.flow.grateitem.item.FindGrateItemByFilterFlowItem;
 import br.com.api.utils.ReportTech;
 import br.com.api.utils.ResponseAPI;
-import br.com.api.utils.Utils;
 
 @Service
 public class FindGrateItemByFilterFlow {

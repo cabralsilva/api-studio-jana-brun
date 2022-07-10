@@ -14,7 +14,7 @@ import lombok.var;
 public class CheckClassFlowItem {
 
 	@Autowired
-	private FindClassByFilterFlowItem findClassByFilterFlowItem;
+	private SearchClassByFilterFlowItem findClassByFilterFlowItem;
 
 	public ClassDTO checkIfExist(ClassDTO cityDTO)
 			throws NoSuchMethodException, SecurityException, IllegalArgumentException, IllegalAccessException,
@@ -24,7 +24,7 @@ public class CheckClassFlowItem {
 		filter.setExample(cityDTO);
 		filter.setPageable(Boolean.FALSE);
 
-		final var existing = findClassByFilterFlowItem.findByFilter(filter).getResult().stream().findFirst();
+		final var existing = findClassByFilterFlowItem.search(filter).getResult().stream().findFirst();
 
 		if (existing.isPresent()) {
 			cityDTO.setIdentifier(existing.get().getIdentifier());

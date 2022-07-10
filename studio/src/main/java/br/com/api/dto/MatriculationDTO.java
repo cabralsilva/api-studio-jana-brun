@@ -28,5 +28,7 @@ public class MatriculationDTO {
     private List<MatriculationItemDTO> matriculationItemList;
     private List<ClassDTO> classList;
 	private MatriculationStatusEnum status;
+	private List<BillToReceiveDTO> billToReceiveList;
+	private String observation;
 
 }

@@ -38,25 +38,25 @@ public class ClassController {
 	@PostMapping
 	public ResponseEntity<ResponseAPI<ClassDTO>> insert(@RequestBody ClassDTO classDTO, @RequestHeader HttpHeaders headers) {
 
-		return ResponseEntity.ok(insertClassFlow.execute(classDTO, headers));
+		return insertClassFlow.execute(classDTO, headers);
 	}
 
 	@PutMapping
 	public ResponseEntity<ResponseAPI<ClassDTO>> update(@RequestBody ClassDTO classDTO, @RequestHeader HttpHeaders headers) {
 
-		return ResponseEntity.ok(updateClassFlow.execute(classDTO, headers));
+		return updateClassFlow.execute(classDTO, headers);
 	}
 
 	@PostMapping("/search")
 	public ResponseEntity<ResponseAPI<ClassFilter>> find(@RequestBody ClassFilter filter, @RequestHeader HttpHeaders headers) {
 
-		return ResponseEntity.ok(findClassByFilterFlow.execute(filter, headers));
+		return findClassByFilterFlow.execute(filter, headers);
 	}
 	
 	@DeleteMapping("/{identifier}")
 	public ResponseEntity<ResponseAPI<Void>> delete(@PathVariable Integer identifier, @RequestHeader HttpHeaders headers) {
 
-		return ResponseEntity.ok(deleteClassByIdentifierFlow.execute(identifier, headers));
+		return deleteClassByIdentifierFlow.execute(identifier, headers);
 	}
 
 }

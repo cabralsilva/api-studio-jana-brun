@@ -14,7 +14,7 @@ import lombok.var;
 public class CheckBillToPayInstallmentFlowItem {
 
 	@Autowired
-	private FindBillToPayInstallmentByFilterFlowItem findBillToPayInstallmentByFilterFlowItem;
+	private SearchBillToPayInstallmentByFilterFlowItem findBillToPayInstallmentByFilterFlowItem;
 
 	public BillToPayInstallmentDTO checkIfExist(BillToPayInstallmentDTO billToPayInstallmentDTO)
 			throws NoSuchMethodException, SecurityException, IllegalArgumentException, IllegalAccessException,
@@ -24,7 +24,7 @@ public class CheckBillToPayInstallmentFlowItem {
 		filter.setExample(billToPayInstallmentDTO);
 		filter.setPageable(Boolean.FALSE);
 		
-		final var existing = findBillToPayInstallmentByFilterFlowItem.findByFilter(filter).getResult().stream().findFirst();
+		final var existing = findBillToPayInstallmentByFilterFlowItem.search(filter).getResult().stream().findFirst();
 
 		if (existing.isPresent()) {
 			billToPayInstallmentDTO.setIdentifier(existing.get().getIdentifier());

@@ -67,4 +67,7 @@ public class Matriculation {
 	@Column(name = "matriculation_status", nullable = false)
 	private MatriculationStatusEnum status;
 
+	@Column(name = "matriculation_observation")
+	private String observation;
+
 }

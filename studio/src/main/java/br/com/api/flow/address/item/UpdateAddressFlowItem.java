@@ -3,21 +3,21 @@ package br.com.api.flow.address.item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.api.converter.CountryMapper;
-import br.com.api.dto.CountryDTO;
-import br.com.api.entity.repository.CountryRepository;
+import br.com.api.converter.AddressMapper;
+import br.com.api.dto.AddressDTO;
+import br.com.api.entity.repository.AddressRepository;
 
 @Component
 public class UpdateAddressFlowItem {
 
 	@Autowired
-	private CountryRepository countryRepository;
+	private AddressRepository addressRepository;
 
 	@Autowired
-	private CountryMapper countryMapper;
+	private AddressMapper addressMapper;
 
-	public CountryDTO update(CountryDTO country) {
+	public AddressDTO update(AddressDTO address) {
 
-		return countryMapper.toDTO(countryRepository.save(countryMapper.toEntity(country)));
+		return addressMapper.toDTO(addressRepository.save(addressMapper.toEntity(address)));
 	}
 }

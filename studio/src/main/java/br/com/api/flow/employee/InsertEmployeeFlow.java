@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +37,12 @@ public class InsertEmployeeFlow {
 
 	@Autowired
 	private MessageSource messageSource;
+	
+	@Autowired
+	private PasswordEncoder encoder;
 
 	@Transactional
-	public ResponseAPI<EmployeeDTO> execute(EmployeeDTO employeeDTO, HttpHeaders headers) throws Exception {
+	public ResponseEntity<ResponseAPI<EmployeeDTO>> execute(EmployeeDTO employeeDTO, HttpHeaders headers) throws Exception {
 
 		ResponseAPI<EmployeeDTO> response = ResponseAPI.<EmployeeDTO>builder().friendlyMessagesList(new ArrayList<>())
 				.build();
@@ -46,6 +52,7 @@ public class InsertEmployeeFlow {
 					.identifier(insertPersonFlow.execute(employeeDTO.getPerson(), headers).getData().getIdentifier())
 					.build());
 
+			employeeDTO.setPassword(encoder.encode("123456"));
 			response.setData(insertEmployeeFlowItem.insert(employeeDTO));
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (Exception e) {
@@ -53,9 +60,9 @@ public class InsertEmployeeFlow {
 
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())
 					.message(e.getLocalizedMessage()).exception(e).build());
-			throw e;
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
 		}
 
-		return response;
+		return ResponseEntity.ok(response);
 	}
 }

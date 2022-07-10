@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +27,11 @@ public class InsertBillToReceiveInstallmentFlow {
 	private MessageSource messageSource;
 
 	@Transactional
-	public ResponseAPI execute(BillToReceiveInstallmentDTO billToReceiveInstallmentDTO, HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<BillToReceiveInstallmentDTO>> execute(
+			BillToReceiveInstallmentDTO billToReceiveInstallmentDTO, HttpHeaders headers) {
 
-		ResponseAPI response = ResponseAPI.builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<BillToReceiveInstallmentDTO> response = ResponseAPI.<BillToReceiveInstallmentDTO>builder()
+				.friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
 			response.setData(insertBillToReceiveInstallmentFlowItem.insert(billToReceiveInstallmentDTO));
@@ -37,8 +41,10 @@ public class InsertBillToReceiveInstallmentFlow {
 
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())
 					.message(e.getLocalizedMessage()).exception(e).build());
+
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
 		}
 
-		return response;
+		return ResponseEntity.ok(response);
 	}
 }

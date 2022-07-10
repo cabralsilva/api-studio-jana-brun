@@ -25,6 +25,7 @@ public abstract class AbstractFilter<L> implements Serializable {
 	protected Boolean asc = false;
 	protected Boolean noOrder = false;
 	protected String globalFilter;
+	private Boolean customSearch = false;
 
 	protected List<String> columnList;
 

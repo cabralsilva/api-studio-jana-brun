@@ -15,6 +15,8 @@ public class CheckNeighborhoodFlowItem {
 
 	@Autowired
 	private FindNeighborhoodByFilterFlowItem findNeighborhoodByFilterFlowItem;
+	@Autowired
+	private InsertNeighborhoodFlowItem insertNeighborhoodFlowItem;
 
 	public NeighborhoodDTO checkIfExist(NeighborhoodDTO neighborhoodDTO)
 			throws NoSuchMethodException, SecurityException, IllegalArgumentException, IllegalAccessException,
@@ -23,11 +25,13 @@ public class CheckNeighborhoodFlowItem {
 		final var filter = new NeighborhoodFilter();
 		filter.setExample(neighborhoodDTO);
 		filter.setPageable(Boolean.FALSE);
-		
+
 		final var existing = findNeighborhoodByFilterFlowItem.findByFilter(filter).getResult().stream().findFirst();
 
 		if (existing.isPresent()) {
 			neighborhoodDTO.setIdentifier(existing.get().getIdentifier());
+		} else {
+			neighborhoodDTO.setIdentifier(insertNeighborhoodFlowItem.insert(neighborhoodDTO).getIdentifier());
 		}
 		return neighborhoodDTO;
 	}

@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -85,7 +86,7 @@ public class RepositoryCustom {
 					List<String> property = new ArrayList<String>(Arrays.asList(orderField.split("groupBy")));
 
 					Field field = ReflectionUtils.findField(entity, property.get(1).split("\\.")[0]);
-					if (field.getType().equals(Date.class)) {
+					if (field.getType().equals(Date.class) || field.getType().equals(Calendar.class)) {
 						if (filter.getAsc()) {
 							orderList.add(criteriaBuilder.asc(root.get(property.get(1)).as(java.sql.Date.class)));
 						} else {
@@ -166,7 +167,7 @@ public class RepositoryCustom {
 					Field field = ReflectionUtils.findField(joinOrigin.getModel().getBindableJavaType(),
 							propertyGroupBySplit.get(1));
 
-					if (field.getType().equals(Date.class)) {
+					if (field.getType().equals(Date.class) || field.getType().equals(Calendar.class)) {
 						cq.groupBy(joinOrigin.get(propertyGroupBySplit.get(1)).as(java.sql.Date.class));
 						selectionsList.add(joinOrigin.get(propertyGroupBySplit.get(1)).as(java.sql.Date.class)
 								.alias(propertySource + "." + propertyGroupBySplit.get(1)));
@@ -257,7 +258,7 @@ public class RepositoryCustom {
 						Arrays.asList(propertySplit.get(0).split("groupBy")));
 
 				Field field = ReflectionUtils.findField(entity, propertyGroupBySplit.get(1));
-				if (field.getType().equals(Date.class)) {
+				if (field.getType().equals(Date.class) || field.getType().equals(Calendar.class)) {
 					cq.groupBy(root.get(propertyGroupBySplit.get(1)).as(java.sql.Date.class));
 					selectionsList.add(root.get(propertyGroupBySplit.get(1)).as(java.sql.Date.class)
 							.alias(propertySource + propertyGroupBySplit.get(1)));

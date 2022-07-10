@@ -25,10 +25,15 @@ public class FindProductByFilterFlow {
 
 	public ResponseAPI<ProductFilter> execute(ProductFilter filter, HttpHeaders headers) {
 
-		ResponseAPI<ProductFilter> response = ResponseAPI.<ProductFilter>builder().friendlyMessagesList(new ArrayList<>()).build();
+		ResponseAPI<ProductFilter> response = ResponseAPI.<ProductFilter>builder()
+				.friendlyMessagesList(new ArrayList<>()).build();
 
 		try {
-			response.setData(findProductByFilterFlowItem.findByFilter(filter));
+			if (Boolean.TRUE.equals(filter.getCustomSearch())) {
+				response.setData(findProductByFilterFlowItem.findByFilterImpl(filter));
+			} else {
+				response.setData(findProductByFilterFlowItem.findByFilter(filter));
+			}
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();

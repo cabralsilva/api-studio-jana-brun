@@ -1,5 +1,6 @@
 package br.com.api.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -49,7 +50,7 @@ public class BillToPayInstallment {
 	private LocalDateTime creationDateTime;
 
 	@Column(name = "bill_to_pay_installment_target_date", nullable = false)
-	private LocalDateTime targetDate;
+	private LocalDate targetDate;
 
 	@Column(name = "bill_to_pay_installment_value", nullable = false)
 	private Double value;

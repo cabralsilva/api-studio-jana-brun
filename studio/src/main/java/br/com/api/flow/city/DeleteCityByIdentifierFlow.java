@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.api.enums.LevelReport;
@@ -18,7 +20,7 @@ public class DeleteCityByIdentifierFlow {
 	@Autowired
 	private DeleteCityFlowItem deleteCityFlowItem;
 
-	public ResponseAPI<Void> execute(Integer identifier , HttpHeaders headers) {
+	public ResponseEntity<ResponseAPI<Void>> execute(Integer identifier , HttpHeaders headers) {
 
 		ResponseAPI<Void> response = ResponseAPI.<Void>builder().friendlyMessagesList(new ArrayList<>()).build();
 
@@ -29,8 +31,9 @@ public class DeleteCityByIdentifierFlow {
 			response.setStatus(StatusResponse.ERROR);
 			response.setReportTech(ReportTech.builder().level(LevelReport.ERROR).code(e.getMessage())
 					.message(e.getLocalizedMessage()).exception(e).build());
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
 		}
 
-		return response;
+		return ResponseEntity.ok(response);
 	}
 }

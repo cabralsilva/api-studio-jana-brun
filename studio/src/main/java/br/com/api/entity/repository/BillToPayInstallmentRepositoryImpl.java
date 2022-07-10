@@ -11,6 +11,8 @@ import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import br.com.api.dto.PersonDTO;
 import br.com.api.entity.BillToPayInstallment;
 
 @Repository
@@ -29,10 +32,13 @@ public class BillToPayInstallmentRepositoryImpl extends RepositoryCustom {
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-	public Predicate filters(BillToPayInstallmentFilter filter, CriteriaBuilder criteriaBuilder, Root<BillToPayInstallment> entity) {
+	public Predicate filters(BillToPayInstallmentFilter filter, CriteriaBuilder criteriaBuilder,
+			Root<BillToPayInstallment> entity) {
 
 		Predicate predicate = criteriaBuilder.conjunction();
 
+		Join<?, ?> billToPayJoin = null;
+		Join<?, ?> personJoin = null;
 		/* filter.getExample() */
 
 		if (Objects.nonNull(filter.getExample())) {
@@ -51,6 +57,29 @@ public class BillToPayInstallmentRepositoryImpl extends RepositoryCustom {
 
 			predicate = criteriaBuilder.and(predicate, criteriaBuilder.or(name));
 
+		}
+
+		if (Objects.nonNull(filter.getStatusInList()) && !filter.getStatusInList().isEmpty()) {
+			predicate = criteriaBuilder.and(predicate,
+					criteriaBuilder.or(entity.get("status").in(filter.getStatusInList())));
+		}
+
+		if (Objects.nonNull(filter.getPersonInList()) && !filter.getPersonInList().isEmpty()) {
+			billToPayJoin = super.setJoin(entity, "billToPay", JoinType.LEFT);
+			personJoin = super.setJoin(billToPayJoin, "person", JoinType.LEFT);
+
+			predicate = criteriaBuilder.and(predicate, criteriaBuilder.or(
+					personJoin.get("identifier").in(filter.getPersonInList().stream().map(PersonDTO::getIdentifier).toArray())));
+		}
+
+		if (filter.getInitTargetDate() != null) {
+			predicate = criteriaBuilder.and(predicate,
+					criteriaBuilder.greaterThanOrEqualTo(entity.get("targetDate"), filter.getInitTargetDate()));
+		}
+
+		if (filter.getEndTargetDate() != null) {
+			predicate = criteriaBuilder.and(predicate,
+					criteriaBuilder.lessThanOrEqualTo(entity.get("targetDate"), filter.getEndTargetDate()));
 		}
 
 		/* end other filters */
@@ -98,14 +127,15 @@ public class BillToPayInstallmentRepositoryImpl extends RepositoryCustom {
 
 		List<BillToPayInstallment> rootList = new ArrayList<>();
 		for (Tuple tuple : typedQuery.getResultList()) {
-			rootList.add(
-					(BillToPayInstallment) super.generateEntity(BillToPayInstallment.class, filter.getColumnList(), "billToPayInstallment.", tuple));
+			rootList.add((BillToPayInstallment) super.generateEntity(BillToPayInstallment.class, filter.getColumnList(),
+					"billToPayInstallment.", tuple));
 		}
 		return new PageImpl<>(rootList, page, total);
 	}
 
-	public List<BillToPayInstallment> findByFilter(BillToPayInstallmentFilter filter) throws NoSuchMethodException, SecurityException,
-			IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public List<BillToPayInstallment> findByFilter(BillToPayInstallmentFilter filter)
+			throws NoSuchMethodException, SecurityException, IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException, InstantiationException {
 
 		super.findByFilter(BillToPayInstallment.class, filter);
 
@@ -126,8 +156,8 @@ public class BillToPayInstallmentRepositoryImpl extends RepositoryCustom {
 
 		List<BillToPayInstallment> rootList = new ArrayList<>();
 		for (Tuple tuple : typedQuery.getResultList()) {
-			rootList.add(
-					(BillToPayInstallment) super.generateEntity(BillToPayInstallment.class, filter.getColumnList(), "billToPayInstallment.", tuple));
+			rootList.add((BillToPayInstallment) super.generateEntity(BillToPayInstallment.class, filter.getColumnList(),
+					"billToPayInstallment.", tuple));
 		}
 		return rootList;
 	}

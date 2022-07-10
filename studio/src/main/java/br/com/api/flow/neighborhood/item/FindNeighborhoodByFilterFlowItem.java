@@ -1,6 +1,6 @@
 package br.com.api.flow.neighborhood.item;
 
-import static br.com.api.exceptions.FindByFilterExceptionEnum.MORE_THAN_ONE_matriculation_FOUND;
+import static br.com.api.exceptions.FindByFilterExceptionEnum.MORE_THAN_ONE_MATRICULATION_FOUND;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -45,7 +45,7 @@ public class FindNeighborhoodByFilterFlowItem {
 		}
 
 		if (Boolean.TRUE.equals(filter.getResultUnique()) && filter.getResult().size() > 1) {
-			throw new FindByFilterException(MORE_THAN_ONE_matriculation_FOUND);
+			throw new FindByFilterException(MORE_THAN_ONE_MATRICULATION_FOUND);
 		}
 
 		return filter;

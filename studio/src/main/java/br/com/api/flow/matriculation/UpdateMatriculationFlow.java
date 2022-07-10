@@ -38,9 +38,6 @@ public class UpdateMatriculationFlow {
 					.identifier(
 							updateStudentFlow.execute(matriculationDTO.getStudent(), headers).getData().getIdentifier())
 					.build());
-//			for (MatriculationItemDTO matriculationItem : matriculationDTO.getMatriculationItemList())
-//				matriculationItem.setMatriculation(
-//						MatriculationDTO.builder().identifier(matriculationDTO.getIdentifier()).build());
 			response.setData(updateMatriculationFlowItem.update(matriculationDTO));
 			response.setStatus(StatusResponse.SUCCESS);
 		} catch (Exception e) {

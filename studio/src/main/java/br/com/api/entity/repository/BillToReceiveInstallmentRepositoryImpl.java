@@ -11,6 +11,8 @@ import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import br.com.api.dto.PersonDTO;
 import br.com.api.entity.BillToReceiveInstallment;
 
 @Repository
@@ -33,6 +36,8 @@ public class BillToReceiveInstallmentRepositoryImpl extends RepositoryCustom {
 
 		Predicate predicate = criteriaBuilder.conjunction();
 
+		Join<?, ?> billToReceiveJoin = null;
+		Join<?, ?> personJoin = null;
 		/* filter.getExample() */
 
 		if (Objects.nonNull(filter.getExample())) {
@@ -51,6 +56,29 @@ public class BillToReceiveInstallmentRepositoryImpl extends RepositoryCustom {
 
 			predicate = criteriaBuilder.and(predicate, criteriaBuilder.or(name));
 
+		}
+		
+		if (Objects.nonNull(filter.getStatusInList()) && !filter.getStatusInList().isEmpty()) {
+			predicate = criteriaBuilder.and(predicate,
+					criteriaBuilder.or(entity.get("status").in(filter.getStatusInList())));
+		}
+
+		if (Objects.nonNull(filter.getPersonInList()) && !filter.getPersonInList().isEmpty()) {
+			billToReceiveJoin = super.setJoin(entity, "billToReceive", JoinType.LEFT);
+			personJoin = super.setJoin(billToReceiveJoin, "customer", JoinType.LEFT);
+
+			predicate = criteriaBuilder.and(predicate, criteriaBuilder.or(
+					personJoin.get("identifier").in(filter.getPersonInList().stream().map(PersonDTO::getIdentifier).toArray())));
+		}
+
+		if (filter.getInitTargetDate() != null) {
+			predicate = criteriaBuilder.and(predicate,
+					criteriaBuilder.greaterThanOrEqualTo(entity.get("targetDate"), filter.getInitTargetDate()));
+		}
+
+		if (filter.getEndTargetDate() != null) {
+			predicate = criteriaBuilder.and(predicate,
+					criteriaBuilder.lessThanOrEqualTo(entity.get("targetDate"), filter.getEndTargetDate()));
 		}
 
 		/* end other filters */

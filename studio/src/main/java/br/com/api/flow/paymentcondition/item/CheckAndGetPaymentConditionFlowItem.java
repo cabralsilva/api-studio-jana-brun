@@ -25,6 +25,6 @@ public class CheckAndGetPaymentConditionFlowItem {
 		if (existing.isPresent())
 			return existing.get();
 
-		throw new FindByFilterException(FindByFilterExceptionEnum.matriculation_NOT_FOUND);
+		throw new FindByFilterException(FindByFilterExceptionEnum.RESOURCE_NOT_FOUND);
 	}
 }
